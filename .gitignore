@@ -40,3 +40,6 @@
 # the following code in the Terminal:
 # find . -size +100M | sed 's|^\./||g' | cat >> .gitignore; awk '!NF || !seen[$0]++' .gitignore
 
+# original data file
+data/US_births(2018).csv
+
