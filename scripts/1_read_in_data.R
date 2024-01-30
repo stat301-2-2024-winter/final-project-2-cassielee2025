@@ -24,6 +24,7 @@ vars <- c(
   "feduc",
   "illb_r",
   "ilop_r",
+  "ilp_r",
   "ld_indl",
   "mager",
   "mbstate_rec",
@@ -53,7 +54,7 @@ set.seed(1293847982)
 
 birth_data <- birth_original %>% 
   slice_sample(n = 60000) %>% 
-  select(vars)
+  select(all_of(vars))
 
 save(birth_data, file = here("data/birth_data.rda"))
 

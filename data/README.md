@@ -6,4 +6,4 @@ The original dataset, `US_births(2018).csv`, was downloaded from the ["US births
 
 60,000 observations were randomly sampled form the original dataset for use in exploratory data analysis, training models, and testing models. 
 
-36 variables were selected from the original dataset according to the variables selected for the [Kaggle Prediction interval competition I: Birth weight competition](https://www.kaggle.com/competitions/prediction-interval-competition-i-birth-weight/data). These variables were selected to match the Kaggle competition to simplify the processes of identifying predictors to be used in the models. 
+37 variables (including target variable) were selected from the original dataset according to the variables selected for the [Kaggle Prediction interval competition I: Birth weight competition](https://www.kaggle.com/competitions/prediction-interval-competition-i-birth-weight/data). These variables were selected to match the Kaggle competition to simplify the processes of identifying predictors to be used in the models. 
