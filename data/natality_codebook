@@ -1,0 +1,38 @@
+variable    | description
+dbwt        | birthweight
+attend      | attendant at birth
+bfacil      | birth place
+bmi         | body mass index
+cig_0       | cigarettes before pregnancy
+dlmp_mm     | last normal menses month
+dmar        | marital status
+dob_mm      | birth month
+dob_tt      | time of birth
+dob_wk      | birth day of week
+fagecomb    | father's combined age
+feduc       | father's education
+illb_r      | interval since last live birth recode
+ilop_r      | interval since last other pregnancy recode
+ilp_r       | interval since last pregnancy recode
+ld_indl     | induction of labor
+mager       | mother's single years of age
+mbstate_rec | mother's nativity
+meduc       | mother's education
+m_ht_in     | mother's height in total inches
+no_infec    | no infections reported
+no_mmorb    | no maternal morbidity reported 
+no_risks    | no risk factors reported
+pay         | payment source for delivery
+pay_rec     | payment recode
+precare     | month prenatal care began
+previs      | number of prenatal visits
+priordead   | prior births now dead
+priorlive   | prior births now living
+priorterm   | prior other terminations
+p_wgt_r     | pre-pregnancy weight recode
+rdmeth_rec  | delviery method recod
+restatus    | residence status
+rf_cesar    | previous cesarean
+rf_cesarn   | number of previous cesarean
+sex         | sex of infant
+wtgain      | weight gain
