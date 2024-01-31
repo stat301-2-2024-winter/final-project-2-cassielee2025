@@ -1,6 +1,8 @@
 ## Original Dataset
 
-The original dataset, `US_births(2018).csv`, was downloaded from the ["US births (2018): 2018 Natality Public Use File"](https://www.kaggle.com/datasets/des137/us-births-2018/data) dataset created by Amol Deshmukh on Kaggle. Deshmukh created this dataset from the raw natality file available from the [Vital Statistics Online Data Portal](https://www.cdc.gov/nchs/data_access/vitalstatsonline.htm#Tools). 
+The original dataset, `US_births(2018).csv`, was downloaded from the ["US births (2018)"](https://www.kaggle.com/datasets/des137/us-births-2018/data) dataset created by Amol Deshmukh on Kaggle. Deshmukh created this dataset from the raw 2018 natality file available from the [Vital Statistics Online Data Portal](https://www.cdc.gov/nchs/data_access/vitalstatsonline.htm#Tools). 
+
+The original dataset has been added to the `.gitignore` file in the main project directory because the file is 507.9 MB and cannot be uploaded to the Github repository.
 
 ## Subsampled Dataset: `birth_data.rda`
 
@@ -9,6 +11,10 @@ The original dataset, `US_births(2018).csv`, was downloaded from the ["US births
 Missing and not applicable values (ex: 3, 9, 99, 99.9, 9999, "U") from the original dataset were converted to `NA` values, and incomplete observations were removed from the dataset. 
 
 60,000 observations were then randomly sampled form the original dataset for use in exploratory data analysis, training models, and testing models. 
+
+The target variable is `low_bw`, defined as `dbwt` less than or equal to 2500 (grams).
+
+Two variables, `plural_del` and `any_precare` are logical variables created from the variables `illb_r`, `ilop_r`,  `ilp_r`, and `precare` because these variables contained multiple types of information (i.e. whether or not there was prenatal care and what month the care began). `plural_del` refers to whether or not the preganancy resulted in a plural delivery. `any_precare` refers to whether or not there was any prenatal care.
 
 ## Data codebook
 `UserGuide2018-508.pdf` is the full data codebook with all variables from the 2018 Natality

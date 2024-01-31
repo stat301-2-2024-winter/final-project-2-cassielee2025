@@ -1,0 +1,190 @@
+---
+title: "Progress Memo 1"
+subtitle: |
+  | Final Project 
+  | Data Science 2 with R (STAT 301-2)
+author: "Cassie Lee"
+date: today
+
+format:
+  html:
+    toc: true
+    embed-resources: true
+    
+execute:
+  echo: false
+  warning: false
+
+from: markdown+emoji 
+reference-location: margin
+citation-location: margin
+bibliography: references.bib
+---
+
+```{r}
+#| label: load-packages-data
+
+library(tidyverse)
+library(here)
+library(knitr)
+```
+
+::: {.callout-tip icon="false"}
+## Github Repo Link
+
+[Cassie Lee's Final Project Memo](https://github.com/stat301-2-2024-winter/final-project-2-cassielee2025.git)
+:::
+
+## Prediction Problem
+
+The developmental origins of health and disease (DOHaD) is a framework that seeks to link exposures to environmental stressors during windows of susceptibility to the development of non-communicable diseases later in life[@lacagnina2019]. Birth weight has historically been used as an indicator of adverse early life exposures to environmental stressors due to the development of the field of DOHaD and the relative ease of collecting birth weight data[@hanson2015]. Low birth weight is a risk factor for developing non-communicable diseases later in life such as cardiovascular diseases, metabolic diseases, and kidney diseases[@bianchi2022]. 
+
+The objective of this prediction problem is to create a model that can predict whether or not an individual given a certain set of characteristics will give birth to a low birth weight infant. This is a classification problem, in which low birth weight is defined as a birth weight of less than or equal to 2500 grams[@hughes2017]. Having a prediciton model for this problem can be useful in providing insights to eventually developing an inferential question that identifies the most important risk factors for low birth weight. 
+
+## Data source
+
+The original dataset was downloaded off the Kaggle dataset, US births (2018)[^1], by Amol Deshmukh. Deshmukh created this dataset from the raw 2018 natality file available from the Vital Statistics Online Data Portal[^2].
+
+I searched Kaggle for a dataset relating to birth weight and found the Kaggle competition, Prediction interval competition I: Birth weight^[[Kaggle competition](https://www.kaggle.com/competitions/prediction-interval-competition-i-birth-weight/discussion/459133)] by Carl McBride Ellis. The dataset from this Kaggle competition cited the US births (2018) Kaggle dataset as its source. I downloaded the US births (2018) Kaggle dataset to have access to the the full dataset and have more control over the amount of observations I used for exploratory data analysis, the training data, and the testing data. From the dataset I downloaded, I selected the same variables that were used in the Kaggle competition so there would be congruence between the competition dataset and my dataset. I am assuming that the variables selected by Ellis are an appropriate mix of variables to use in a prediction problem.
+
+[^1]: [Kaggle dataset](https://www.kaggle.com/datasets/des137/us-births-2018/data)
+
+[^2]: [CDC Vital Statistics Online Data Portal](https://www.cdc.gov/nchs/data_access/vitalstatsonline.htm#Tools)
+
+## Data quality & complexity check
+
+The dataset I downloaded has over 3 million observations, corresponding to all US births in 2018, so I randomly sampled 60,000 observations for use in this project. I will use 20,000 observations for exploratory data analysis and split the remaining 40,000 observations between training and testing sets. 
+
+Before randomly sampling the data, I checked the data codebook and recoded all missing, unknown, or not applicable values for each variable as `NA`. I then removed all incomplete observations and randomly sampled the data. 
+
+I successfully read in the data, subsetted variables, and dropped observations with missing values:
+```{r}
+#| label: read-in-data
+#| eval: false
+#| echo: true
+#| code-fold: true
+
+birth_original <- read_csv(here("data/US_births(2018).csv")) %>% 
+  janitor::clean_names()
+
+# create list of variables to select
+vars <- c(
+  "dbwt",
+  "attend",
+  "bfacil",
+  "bmi",
+  "cig_0",
+  "dlmp_mm",
+  "dmar",
+  "dob_mm",
+  "dob_tt",
+  "dob_wk",
+  "fagecomb",
+  "feduc",
+  "illb_r",
+  "ilop_r",
+  "ilp_r",
+  "ld_indl",
+  "mager",
+  "mbstate_rec",
+  "meduc",
+  "m_ht_in",
+  "no_infec",
+  "no_mmorb",
+  "no_risks",
+  "pay",
+  "pay_rec",
+  "precare",
+  "previs",
+  "priordead",
+  "priorlive",
+  "priorterm",
+  "p_wgt_r",
+  "rdmeth_rec",
+  "restatus",
+  "rf_cesar",
+  "rf_cesarn",
+  "sex",
+  "wtgain"
+)
+  
+# filter out incomplete observations
+birth_complete <- birth_original %>% 
+  select(all_of(vars)) %>% 
+  mutate(
+    dbwt = na_if(dbwt, 9999),
+    attend = na_if(attend, 9),
+    bfacil = na_if(bfacil, 9),
+    bmi = na_if(bmi, 99.9),
+    cig_0 = na_if(cig_0, 99),
+    dlmp_mm = na_if(dlmp_mm, 99),
+    dob_tt = na_if(dob_tt, 9999),
+    fagecomb = na_if(fagecomb, 99),
+    feduc = na_if(feduc, 9),
+    illb_r = na_if(illb_r, 888),
+    illb_r = na_if(illb_r, 999),
+    ilop_r = na_if(ilop_r, 888),
+    ilop_r = na_if(ilop_r, 999),
+    ilp_r = na_if(ilp_r, 888),
+    ilp_r = na_if(ilp_r, 999),
+    ld_indl = na_if(ld_indl, "U"),
+    mbstate_rec = na_if(mbstate_rec, 3),
+    meduc = na_if(meduc, 9),
+    m_ht_in = na_if(m_ht_in, 99),
+    no_infec  = na_if(no_infec, 9),
+    no_mmorb = na_if(no_mmorb, 9),
+    no_risks = na_if(no_risks, 9),
+    pay  = na_if(pay, 9),
+    pay_rec = na_if(pay_rec, 9),
+    precare = na_if(precare, 99),
+    previs = na_if(previs, 99),
+    priordead = na_if(priordead, 99),
+    priorlive = na_if(priorlive, 99),
+    priorterm = na_if(priorterm, 99),
+    p_wgt_r = na_if(p_wgt_r, 999),
+    rdmeth_rec = na_if(rdmeth_rec, 9),
+    rf_cesar = na_if(rf_cesar, "U"),
+    # convert number of cesarean to from character to numeric
+    rf_cesarn = as.numeric(rf_cesarn),
+    rf_cesarn = na_if(rf_cesarn, 99),
+    wtgain = na_if(wtgain, 99)
+  ) %>% 
+  drop_na()
+
+# show proper read in
+show_birth_read_in <- birth_complete %>%
+  slice(1:10)
+```
+
+```{r}
+#| label: show-read-in
+
+load(here("memos/memo1_outputs/show_birth_read_in.rda"))
+show_birth_read_in %>% 
+  kable()
+```
+
+The target variable is `low_bw`, defined as `dbwt` less than or equal to 2500 (grams).
+
+Aside from `low_bw` and `dbwt`, there are 19 factor variables, 18 numeric variables, and 2 logical variables.
+
+Two variables, `plural_del` and `any_precare` are logical variables created from the variables `illb_r`, `ilop_r`,  `ilp_r`, and `precare` because these variables contained multiple types of information (i.e. whether or not there was prenatal care and what month the care began). `plural_del` refers to whether or not the pregnancy resulted in a plural delivery. `any_precare` refers to whether or not there was any prenatal care.
+
+4 variables, `illb_r`, `ilop_r`,  `ilp_r`, and `precare` are missing a few observations due to the modifications described above, but it is not a significant amount. There are no other missingness issues:
+
+```{r}
+#| label: show-missingness
+
+load(here("memos/memo1_outputs/data_quality_check.rda"))
+data_quality_check %>% 
+  kable()
+```
+
+
+## Potential data issues
+
+Blah blah blah
+
+## Misc
+
+Blah Blah

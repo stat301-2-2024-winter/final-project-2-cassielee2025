@@ -4,6 +4,8 @@
 library(tidyverse)
 library(here)
 
+# original dataset ----
+
 # read in data and clean names
 birth_original <- read_csv(here("data/US_births(2018).csv")) %>% 
   janitor::clean_names()
@@ -48,7 +50,7 @@ vars <- c(
   "sex",
   "wtgain"
 )
-
+  
 # filter out incomplete observations
 birth_complete <- birth_original %>% 
   select(all_of(vars)) %>% 
@@ -92,14 +94,88 @@ birth_complete <- birth_original %>%
   ) %>% 
   drop_na()
 
+# show proper read in
+show_birth_read_in <- birth_complete %>%
+  slice(1:10)
+
+# subset data ----
+
 # set seed
 set.seed(1293847982)
 
 birth_data <- birth_complete %>% 
-  slice_sample(n = 60000)
+  slice_sample(n = 60000) %>% 
+  mutate(low_bw = if_else(dbwt <= 2500, TRUE, FALSE))
 
+# check variable types and create new variable from variables that contain multiple
+# types of information
+birth_data <- birth_data %>% 
+  # change categorical variables from numeric/character to factor
+  mutate(
+    attend = factor(attend),
+    bfacil = factor(bfacil),
+    dlmp_mm = factor(dlmp_mm),
+    dmar = factor(dmar),
+    dob_mm = factor(dob_mm),
+    dob_wk = factor(dob_wk),
+    feduc = factor(feduc),
+    ld_indl = factor(ld_indl),
+    mbstate_rec = factor(mbstate_rec),
+    meduc = factor(meduc),
+    no_infec = factor(no_infec),
+    no_mmorb = factor(no_mmorb),
+    no_risks = factor(no_risks),
+    pay = factor(pay),
+    pay_rec = factor(pay_rec),
+    rdmeth_rec = factor(rdmeth_rec),
+    restatus = factor(restatus),
+    rf_cesar = factor(rf_cesar), 
+    sex = factor(sex)
+  ) %>%
+  # for illb_r, ilop_r, ilp_r, 000-003 is plural delivery, not describing an interval
+  mutate(
+    # if illb_r, ilop_r, ilp_r is between 000-003, label as true (plural delivery)
+    plural_del = if_else(
+      illb_r %in% c(000, 001, 002, 003) |
+      ilop_r %in% c(000, 001, 002, 003) |
+      ilp_r %in% c(000, 001, 002, 003),
+      TRUE,
+      FALSE
+    ),
+    # if illb_r, ilop_r, ilp_r is between 000-003, change to NA
+    illb_r = na_if(illb_r, 000),
+    illb_r = na_if(illb_r, 001),
+    illb_r = na_if(illb_r, 002),
+    illb_r = na_if(illb_r, 003),
+    ilop_r = na_if(ilop_r, 000),
+    ilop_r = na_if(ilop_r, 001),
+    ilop_r = na_if(ilop_r, 002),
+    ilop_r = na_if(ilop_r, 003),
+    ilp_r = na_if(ilop_r, 000),
+    ilp_r = na_if(ilop_r, 001),
+    ilp_r = na_if(ilop_r, 002),
+    ilp_r = na_if(ilop_r, 003),
+  ) %>% 
+  # for precare, 00 is no prenatal care, not describing when prenatal care began
+  mutate(
+    # if there precare is 00, label as false
+    any_precare = if_else(precare == 00, FALSE, TRUE),
+    # if there precare is 00, change to NA
+    precare = na_if(precare, 00)
+  )
+
+# data quality check ----
+data_quality_check <- birth_data %>% 
+  skimr::skim_without_charts() %>% 
+  select(skim_variable, n_missing, complete_rate) %>%
+  arrange(complete_rate) %>% 
+  slice(1:5)
+
+# save subsetted data ----
 save(birth_data, file = here("data/birth_data.rda"))
 
-
+# save memo1 outputs ----
+save(show_birth_read_in, file = here("memos/memo1_outputs/show_birth_read_in.rda"))
+save(data_quality_check, file = here("memos/memo1_outputs/data_quality_check.rda"))
 
 
