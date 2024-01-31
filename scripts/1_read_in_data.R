@@ -49,12 +49,54 @@ vars <- c(
   "wtgain"
 )
 
+# filter out incomplete observations
+birth_complete <- birth_original %>% 
+  select(all_of(vars)) %>% 
+  mutate(
+    dbwt = na_if(dbwt, 9999),
+    attend = na_if(attend, 9),
+    bfacil = na_if(bfacil, 9),
+    bmi = na_if(bmi, 99.9),
+    cig_0 = na_if(cig_0, 99),
+    dlmp_mm = na_if(dlmp_mm, 99),
+    dob_tt = na_if(dob_tt, 9999),
+    fagecomb = na_if(fagecomb, 99),
+    feduc = na_if(feduc, 9),
+    illb_r = na_if(illb_r, 888),
+    illb_r = na_if(illb_r, 999),
+    ilop_r = na_if(ilop_r, 888),
+    ilop_r = na_if(ilop_r, 999),
+    ilp_r = na_if(ilp_r, 888),
+    ilp_r = na_if(ilp_r, 999),
+    ld_indl = na_if(ld_indl, "U"),
+    mbstate_rec = na_if(mbstate_rec, 3),
+    meduc = na_if(meduc, 9),
+    m_ht_in = na_if(m_ht_in, 99),
+    no_infec  = na_if(no_infec, 9),
+    no_mmorb = na_if(no_mmorb, 9),
+    no_risks = na_if(no_risks, 9),
+    pay  = na_if(pay, 9),
+    pay_rec = na_if(pay_rec, 9),
+    precare = na_if(precare, 99),
+    previs = na_if(previs, 99),
+    priordead = na_if(priordead, 99),
+    priorlive = na_if(priorlive, 99),
+    priorterm = na_if(priorterm, 99),
+    p_wgt_r = na_if(p_wgt_r, 999),
+    rdmeth_rec = na_if(rdmeth_rec, 9),
+    rf_cesar = na_if(rf_cesar, "U"),
+    # convert number of cesarean to from character to numeric
+    rf_cesarn = as.numeric(rf_cesarn),
+    rf_cesarn = na_if(rf_cesarn, 99),
+    wtgain = na_if(wtgain, 99)
+  ) %>% 
+  drop_na()
+
 # set seed
 set.seed(1293847982)
 
-birth_data <- birth_original %>% 
-  slice_sample(n = 60000) %>% 
-  select(all_of(vars))
+birth_data <- birth_complete %>% 
+  slice_sample(n = 60000)
 
 save(birth_data, file = here("data/birth_data.rda"))
 
