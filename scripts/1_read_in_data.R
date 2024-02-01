@@ -104,8 +104,7 @@ show_birth_read_in <- birth_complete %>%
 set.seed(1293847982)
 
 birth_data <- birth_complete %>% 
-  slice_sample(n = 60000) %>% 
-  mutate(low_bw = if_else(dbwt <= 2500, TRUE, FALSE))
+  slice_sample(n = 60000)
 
 # check variable types and create new variable from variables that contain multiple
 # types of information

@@ -35,11 +35,15 @@ library(knitr)
 [Cassie Lee's Final Project Memo](https://github.com/stat301-2-2024-winter/final-project-2-cassielee2025.git)
 :::
 
-## Prediction Problem
+## Prediction problem
 
 The developmental origins of health and disease (DOHaD) is a framework that seeks to link exposures to environmental stressors during windows of susceptibility to the development of non-communicable diseases later in life[@lacagnina2019]. Birth weight has historically been used as an indicator of adverse early life exposures to environmental stressors due to the development of the field of DOHaD and the relative ease of collecting birth weight data[@hanson2015]. Low birth weight is a risk factor for developing non-communicable diseases later in life such as cardiovascular diseases, metabolic diseases, and kidney diseases[@bianchi2022]. 
 
-The objective of this prediction problem is to create a model that can predict whether or not an individual given a certain set of characteristics will give birth to a low birth weight infant. This is a classification problem, in which low birth weight is defined as a birth weight of less than or equal to 2500 grams[@hughes2017]. Having a prediciton model for this problem can be useful in providing insights to eventually developing an inferential question that identifies the most important risk factors for low birth weight. 
+The objective of this prediction problem is to create a model to predict the birth weight of an infant given a certain set of characteristics. This is a regression problem. Having a prediction model for this problem can be useful in providing insights to eventually developing an inferential question that identifies the most important factors associated with birth weight. 
+
+I had originally wanted to do a classification problem to predict whether or not an infant would be classified as being born with a low birth weight, however, upon inspection of the target variable, there were only about 10% of observations that were considered low birth weight.
+
+This is interesting to me because I am interested in how environmental exposures related to climate change during windows of susceptibility affect birth weight. However, due to constraints on the data I was able to find, I am only focusing on the birth weight aspect for this prediction problem.
 
 ## Data source
 
@@ -51,7 +55,7 @@ I searched Kaggle for a dataset relating to birth weight and found the Kaggle co
 
 [^2]: [CDC Vital Statistics Online Data Portal](https://www.cdc.gov/nchs/data_access/vitalstatsonline.htm#Tools)
 
-## Data quality & complexity check
+## Data quality check
 
 The dataset I downloaded has over 3 million observations, corresponding to all US births in 2018, so I randomly sampled 60,000 observations for use in this project. I will use 20,000 observations for exploratory data analysis and split the remaining 40,000 observations between training and testing sets. 
 
@@ -164,9 +168,9 @@ show_birth_read_in %>%
   kable()
 ```
 
-The target variable is `low_bw`, defined as `dbwt` less than or equal to 2500 (grams).
+The target variable is brith weight, `dbwt`.
 
-Aside from `low_bw` and `dbwt`, there are 19 factor variables, 18 numeric variables, and 2 logical variables.
+Aside from `dbwt`, there are 19 factor variables, 18 numeric variables, and 2 logical variables.
 
 Two variables, `plural_del` and `any_precare` are logical variables created from the variables `illb_r`, `ilop_r`,  `ilp_r`, and `precare` because these variables contained multiple types of information (i.e. whether or not there was prenatal care and what month the care began). `plural_del` refers to whether or not the pregnancy resulted in a plural delivery. `any_precare` refers to whether or not there was any prenatal care.
 
@@ -180,11 +184,14 @@ data_quality_check %>%
   kable()
 ```
 
+## Target variable analysis
 
-## Potential data issues
+The target variable, `dbwt`, is pretty normally distributed, so there are not issues with skweness. No transformations will be needed to work with the target variable.
 
-Blah blah blah
+```{r}
+#| label: target-variable-analysis
 
-## Misc
+load(here("memos/memo1_outputs/target_variable.rda"))
+plot
+```
 
-Blah Blah
