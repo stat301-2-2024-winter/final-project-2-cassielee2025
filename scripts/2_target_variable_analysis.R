@@ -39,6 +39,6 @@ plot <- p2/p1 +
 save(plot, file = here("memos/memo1_outputs/target_variable.rda"))
 
 # save data splits
-save(birth_eda, file = here("data/birth_eda.rda"))
-save(birth_model_data, file = here("data/birth_model_data.rda"))
+save(birth_eda, file = here("data/data_split/birth_eda.rda"))
+save(birth_model_data, file = here("data/data_split/birth_model_data.rda"))
 
