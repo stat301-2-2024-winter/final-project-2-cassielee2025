@@ -22,7 +22,7 @@ plot_factor <- function(var){
   
   # create boxplot between factor variable and birthweight
   birth_eda %>% 
-    ggplot(aes({{var}}, dbwt)) +
+    ggplot(aes({{  var  }}, dbwt)) +
     geom_boxplot() +
     theme_classic()
   
@@ -56,6 +56,7 @@ for(i in factor_vars){
   plot_factor(var_name)
 }
 
-var_name <- as.name("attend")
+var_name <- as.name("attend") 
 plot_factor(var_name) # why doesn't this work
 plot_factor(attend)
+
