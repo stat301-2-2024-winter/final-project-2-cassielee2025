@@ -1,1 +1,40 @@
 # create recipes
+
+# load packages ----
+library(tidyverse)
+library(tidymodels)
+library(here)
+
+# prefer tidymodels
+tidymodels_prefer()
+
+# load training set
+load(here("data/data_split/birth_train.rda"))
+
+# recipe for linear and elastic net
+birth_rec1 <- birth_train %>% 
+  recipe(dbwt ~ .) %>% 
+  step_dummy(all_nominal_predictors()) %>% 
+  step_impute_knn(all_numeric_predictors()) %>% 
+  step_zv() %>% 
+  step_center(all_numeric_predictors()) %>% 
+  step_scale(all_numeric_predictors())
+
+birth_rec1 %>% 
+  prep() %>% 
+  bake(new_data = NULL) %>% 
+  view()
+
+# recipe for tree based models
+birth_rec2 <- birth_train %>% 
+  recipe(dbwt ~ .) %>% 
+  step_dummy(all_nominal_predictors(), one_hot = TRUE) %>% 
+  step_impute_knn(all_numeric_predictors()) %>% 
+  step_zv()
+
+birth_rec2 %>% 
+  prep() %>% 
+  bake(new_data = NULL)
+
+# save recipes 
+  
