@@ -17,11 +17,7 @@ The target variable is birth weight, `dbwt`.
 Two variables, `plural_del` and `any_precare` are logical variables created from the variables `illb_r`, `ilop_r`,  `ilp_r`, and `precare` because these variables contained multiple types of information (i.e. whether or not there was prenatal care and what month the care began). `plural_del` refers to whether or not the pregnancy resulted in a plural delivery. `any_precare` refers to whether or not there was any prenatal care.
 
 ## Data splits (`data_split/`)
-
-The subsetted observations with split into two datasets. These datasets are mutually exclusive.
-
-- `birth_eda.rda`: 20,000 observations to be used for exploratory data analysis
-- `birth_model_data.rda`: 40,000 observations to be used in testing and training
+The subsetted observations with split into two datasets. These datasets are mutually exclusive. This also contains the training, testing, and resampled datasets.
 
 ## Data codebook
 `UserGuide2018-508.pdf` is the full data codebook with all variables from the 2018 Natality
