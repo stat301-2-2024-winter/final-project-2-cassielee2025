@@ -21,28 +21,9 @@ plot_factor <- function(var){
     ggplot(aes({{  var  }}, dbwt)) +
     geom_boxplot() +
     theme_classic()
-}
-
-# check that the function works
-plot_factor(attend)
-plot_factor(bfacil)
-
-# get list of factor variables
-factor_vars <- birth_eda %>% 
-  select_if(is.factor) %>% 
-  colnames()
-
-factor_vars %>% 
-  map(plot_factor)
-
-# plot for all factor variables
-for(i in factor_vars){
-
-  # make and save plot
-  plot_factor(!! sym(i))
   
   # create file name
-  file_name <- paste0("factor_", i, ".png")
+  file_name <- rlang::englue("factor_{{  var  }}.png")
   
   # save file
   ggsave(
@@ -52,7 +33,57 @@ for(i in factor_vars){
   )
 }
 
-var_name <- as.name("attend") 
-plot_factor(var_name) # why doesn't this work
-plot_factor(attend)
+# # check that the function works
+# plot_factor(attend)
 
+# get list of factor variables
+factor_vars <- birth_eda %>% 
+  select(where(is.factor), where(is.logical)) %>% 
+  colnames()
+
+# plot for all factor variables
+for(i in factor_vars){
+  
+  # make and save plot
+  plot_factor(!! sym(i))
+
+}
+
+# factor variables ----
+
+# function for plotting factor variables
+plot_numeric <- function(var){
+  
+  # create boxplot between factor variable and birthweight
+  birth_eda %>% 
+    ggplot(aes({{  var  }}, dbwt)) +
+    geom_point(alpha = 0.1) +
+    geom_smooth(method = "lm", se = FALSE) + 
+    theme_classic()
+  
+  # create file name
+  file_name <- rlang::englue("numeric_{{  var  }}.png")
+  
+  # save file
+  ggsave(
+    file_name, 
+    plot = last_plot(), 
+    path = here("eda_output/")
+  )
+}
+
+# # check that the function works
+# plot_numeric(bmi)
+
+# get list of numeric variables
+numeric_vars <- birth_eda %>% 
+  select(where(is.numeric), -dbwt) %>% 
+  colnames()
+
+# plot for all numeric variables
+for(i in numeric_vars){
+  
+  # make and save plot
+  plot_numeric(!! sym(i))
+  
+}
