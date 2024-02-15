@@ -2,11 +2,7 @@
 
 # load packages
 library(tidyverse)
-library(tidymodels)
 library(here)
-
-# prefer tidymodels package
-tidymodels_prefer()
 
 # load EDA data
 load(here("data/data_split/birth_eda.rda"))
@@ -25,16 +21,6 @@ plot_factor <- function(var){
     ggplot(aes({{  var  }}, dbwt)) +
     geom_boxplot() +
     theme_classic()
-  
-  # create file name
-  file_name <- paste0("factor_", deparse(substitute(var)), ".png")
-  
-  # save file
-  ggsave(
-    file_name, 
-    plot = last_plot(), 
-    path = here("eda_output/")
-  )
 }
 
 # check that the function works
@@ -44,16 +30,26 @@ plot_factor(bfacil)
 # get list of factor variables
 factor_vars <- birth_eda %>% 
   select_if(is.factor) %>% 
-  names()
+  colnames()
+
+factor_vars %>% 
+  map(plot_factor)
 
 # plot for all factor variables
 for(i in factor_vars){
-  
-  # get raw variable name
-  var_name <- as.name(i)
-  
+
   # make and save plot
-  plot_factor(var_name)
+  plot_factor(!! sym(i))
+  
+  # create file name
+  file_name <- paste0("factor_", i, ".png")
+  
+  # save file
+  ggsave(
+    file_name, 
+    plot = last_plot(), 
+    path = here("eda_output/")
+  )
 }
 
 var_name <- as.name("attend") 
