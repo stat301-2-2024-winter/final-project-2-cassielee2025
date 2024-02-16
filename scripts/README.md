@@ -7,3 +7,4 @@ This folder contains all the .R scripts associated with the project.
 - `2_target_variable_analysis.R`: splitting subsetted data into EDA data and modeling data, univariate analysis of birth weight (`dbwt`)
 - `3_eda.R`: EDA of 20,000 variables
 - `4_data_split_fold.R`: split model data into training and testing sets and create resampled dataset using vfold cross validation
+- `5_recipes.R`: creating two recipes, one for linear/elastic net models, one for tree based models
