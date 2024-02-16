@@ -14,8 +14,8 @@ load(here("data/data_split/birth_train.rda"))
 # recipe for linear and elastic net
 birth_rec1 <- birth_train %>% 
   recipe(dbwt ~ .) %>% 
-  step_dummy(all_nominal_predictors()) %>% 
   step_impute_knn(all_numeric_predictors()) %>% 
+  step_dummy(all_nominal_predictors()) %>% 
   step_zv() %>% 
   step_center(all_numeric_predictors()) %>% 
   step_scale(all_numeric_predictors())
@@ -23,7 +23,7 @@ birth_rec1 <- birth_train %>%
 birth_rec1 %>% 
   prep() %>% 
   bake(new_data = NULL) %>% 
-  view()
+  slice(1:5)
 
 # recipe for tree based models
 birth_rec2 <- birth_train %>% 
@@ -34,7 +34,9 @@ birth_rec2 <- birth_train %>%
 
 birth_rec2 %>% 
   prep() %>% 
-  bake(new_data = NULL)
+  bake(new_data = NULL) %>% 
+  slice(1:5)
 
 # save recipes 
-  
+save(birth_rec1, file = here("recipes/birth_rec1.rda"))
+save(birth_rec2, file = here("recipes/birth_rec2.rda"))
