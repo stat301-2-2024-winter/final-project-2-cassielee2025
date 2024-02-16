@@ -16,7 +16,7 @@ birth_rec1 <- birth_train %>%
   recipe(dbwt ~ .) %>% 
   step_impute_knn(all_numeric_predictors()) %>% 
   step_dummy(all_nominal_predictors()) %>% 
-  step_zv() %>% 
+  step_nzv() %>% 
   step_center(all_numeric_predictors()) %>% 
   step_scale(all_numeric_predictors())
 
@@ -30,7 +30,7 @@ birth_rec2 <- birth_train %>%
   recipe(dbwt ~ .) %>% 
   step_dummy(all_nominal_predictors(), one_hot = TRUE) %>% 
   step_impute_knn(all_numeric_predictors()) %>% 
-  step_zv()
+  step_nzv()
 
 birth_rec2 %>% 
   prep() %>% 
