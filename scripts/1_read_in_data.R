@@ -94,21 +94,8 @@ birth_complete <- birth_original %>%
   ) %>% 
   drop_na()
 
-# show proper read in
-show_birth_read_in <- birth_complete %>%
-  slice(1:10)
-
-# subset data ----
-
-# set seed
-set.seed(1293847982)
-
-birth_data <- birth_complete %>% 
-  slice_sample(n = 60000)
-
-# check variable types and create new variable from variables that contain multiple
-# types of information
-birth_data <- birth_data %>% 
+# check variable types and create new variables form variables that contain multiple
+birth_complete <- birth_complete %>% 
   # change categorical variables from numeric/character to factor
   mutate(
     attend = factor(attend),
@@ -136,8 +123,8 @@ birth_data <- birth_data %>%
     # if illb_r, ilop_r, ilp_r is between 000-003, label as true (plural delivery)
     plural_del = if_else(
       illb_r %in% c(000, 001, 002, 003) |
-      ilop_r %in% c(000, 001, 002, 003) |
-      ilp_r %in% c(000, 001, 002, 003),
+        ilop_r %in% c(000, 001, 002, 003) |
+        ilp_r %in% c(000, 001, 002, 003),
       TRUE,
       FALSE
     ),
@@ -161,7 +148,20 @@ birth_data <- birth_data %>%
     any_precare = if_else(precare == 00, FALSE, TRUE),
     # if there precare is 00, change to NA
     precare = na_if(precare, 00)
-  )
+  ) %>% 
+  drop_na()
+
+# show proper read in
+show_birth_read_in <- birth_complete %>%
+  slice(1:10)
+
+# subset data ----
+
+# set seed
+set.seed(1293847982)
+
+birth_data <- birth_complete %>% 
+  slice_sample(n = 60000)
 
 # data quality check ----
 data_quality_check <- birth_data %>% 
