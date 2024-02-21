@@ -50,7 +50,7 @@ vars <- c(
   "sex",
   "wtgain"
 )
-  
+
 # filter out incomplete observations
 birth_complete <- birth_original %>% 
   select(all_of(vars)) %>% 
@@ -94,8 +94,21 @@ birth_complete <- birth_original %>%
   ) %>% 
   drop_na()
 
-# check variable types and create new variables form variables that contain multiple
-birth_complete <- birth_complete %>% 
+# show proper read in
+show_birth_read_in <- birth_complete %>%
+  slice(1:10)
+
+# subset data ----
+
+# set seed
+set.seed(1293847982)
+
+birth_data <- birth_complete %>% 
+  slice_sample(n = 60000)
+
+# check variable types and create new variable from variables that contain multiple
+# types of information
+birth_data <- birth_data %>% 
   # change categorical variables from numeric/character to factor
   mutate(
     attend = factor(attend),
@@ -148,20 +161,7 @@ birth_complete <- birth_complete %>%
     any_precare = if_else(precare == 00, FALSE, TRUE),
     # if there precare is 00, change to NA
     precare = na_if(precare, 00)
-  ) %>% 
-  drop_na()
-
-# show proper read in
-show_birth_read_in <- birth_complete %>%
-  slice(1:10)
-
-# subset data ----
-
-# set seed
-set.seed(1293847982)
-
-birth_data <- birth_complete %>% 
-  slice_sample(n = 60000)
+  )
 
 # data quality check ----
 data_quality_check <- birth_data %>% 
@@ -176,5 +176,3 @@ save(birth_data, file = here("data/birth_data.rda"))
 # save memo1 outputs ----
 save(show_birth_read_in, file = here("memos/memo1_outputs/show_birth_read_in.rda"))
 save(data_quality_check, file = here("memos/memo1_outputs/data_quality_check.rda"))
-
-
