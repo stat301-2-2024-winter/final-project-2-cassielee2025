@@ -21,6 +21,12 @@ set.seed(892374934)
 birth_split <- birth_model_data %>% 
   initial_split(prop = 0.75, strata = dbwt)
 
+split_dimensions <- birth_split %>% 
+  dim()
+
+# save splitting dimensions
+save(split_dimensions, file = here("memos/memo2_outputs/split_dimensions.rda"))
+
 # extract training and testing sets
 birth_train <- birth_split %>% 
   training()

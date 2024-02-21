@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Cassie Lee">
-<meta name="dcterms.date" content="2024-02-16">
+<meta name="dcterms.date" content="2024-02-21">
 
 <title>Progress Memo 2</title>
 <style>
@@ -3033,8 +3033,13 @@ vertical-align: -.125em;
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#analysis-plan" id="toc-analysis-plan" class="nav-link active" data-scroll-target="#analysis-plan">Analysis Plan</a></li>
+  <li><a href="#analysis-plan" id="toc-analysis-plan" class="nav-link active" data-scroll-target="#analysis-plan">Analysis Plan</a>
+  <ul class="collapse">
+  <li><a href="#data-splitting" id="toc-data-splitting" class="nav-link" data-scroll-target="#data-splitting">Data Splitting</a></li>
+  <li><a href="#resampling" id="toc-resampling" class="nav-link" data-scroll-target="#resampling">Resampling</a></li>
+  </ul></li>
   <li><a href="#two-model-types" id="toc-two-model-types" class="nav-link" data-scroll-target="#two-model-types">Two Model Types</a></li>
+  <li><a href="#exploratory-data-analysis" id="toc-exploratory-data-analysis" class="nav-link" data-scroll-target="#exploratory-data-analysis">Exploratory Data Analysis</a></li>
   <li><a href="#progress-summary-and-potential-issues" id="toc-progress-summary-and-potential-issues" class="nav-link" data-scroll-target="#progress-summary-and-potential-issues">Progress Summary and Potential Issues</a></li>
   </ul>
 </nav>
@@ -3062,7 +3067,7 @@ Data Science 2 with R (STAT 301-2)</div><p></p>
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">February 16, 2024</p>
+      <p class="date">February 21, 2024</p>
     </div>
   </div>
   
@@ -3089,16 +3094,55 @@ Github Repo Link
 </div>
 <section id="analysis-plan" class="level2">
 <h2 class="anchored" data-anchor-id="analysis-plan">Analysis Plan</h2>
-<p><strong>Data Splitting</strong></p>
-<p><strong>Resampling</strong></p>
+<section id="data-splitting" class="level3">
+<h3 class="anchored" data-anchor-id="data-splitting">Data Splitting</h3>
+<p>The 40,000 observations used for this prediction problem was split using a 75/25 split between training and testing data, stratified by birth weight.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">analysis</td>
+<td style="text-align: right;">29999</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">assessment</td>
+<td style="text-align: right;">10001</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">n</td>
+<td style="text-align: right;">40000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">p</td>
+<td style="text-align: right;">39</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="resampling" class="level3">
+<h3 class="anchored" data-anchor-id="resampling">Resampling</h3>
+<p>The training data was then resampled using vfold cross validation with 5 folds and 3 repeats, so each model/workflow will be trained/fit 15 times for a metric estimate and standard error.</p>
 <p><strong>Model Types</strong></p>
 <p><strong>Recipes</strong></p>
 <p><strong>Metrics</strong></p>
+</section>
 </section>
 <section id="two-model-types" class="level2">
 <h2 class="anchored" data-anchor-id="two-model-types">Two Model Types</h2>
 <p><strong>Null/base Model</strong></p>
 <p><strong>Standard Linear Regression</strong></p>
+</section>
+<section id="exploratory-data-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="exploratory-data-analysis">Exploratory Data Analysis</h2>
 </section>
 <section id="progress-summary-and-potential-issues" class="level2">
 <h2 class="anchored" data-anchor-id="progress-summary-and-potential-issues">Progress Summary and Potential Issues</h2>

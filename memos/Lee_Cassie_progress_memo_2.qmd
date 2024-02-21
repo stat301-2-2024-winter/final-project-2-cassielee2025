@@ -37,9 +37,24 @@ library(knitr)
 
 ## Analysis Plan
 
-**Data Splitting**
+### Data Splitting
 
-**Resampling**
+The 40,000 observations used for this prediction problem was split using a 75/25 split between training and testing data, stratified by birth weight.
+
+```{r}
+#| label: data-split
+#| echo: false
+
+load(here("memos/memo2_outputs/split_dimensions.rda"))
+split_dimensions %>% 
+  kable()
+```
+
+
+### Resampling
+
+The training data was then resampled using vfold cross validation with 5 folds and 3 repeats, so each model/workflow will be trained/fit 15 times for a metric estimate and standard error.
+
 
 **Model Types**
 
@@ -52,5 +67,7 @@ library(knitr)
 **Null/base Model**
 
 **Standard Linear Regression**
+
+## Exploratory Data Analysis
 
 ## Progress Summary and Potential Issues
