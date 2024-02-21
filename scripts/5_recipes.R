@@ -15,7 +15,7 @@ load(here("data/data_split/birth_train.rda"))
 birth_rec1 <- birth_train %>% 
   recipe(dbwt ~ .) %>% 
   step_dummy(all_nominal_predictors()) %>% 
-  step_nzv() %>% 
+  step_nzv(all_predictors()) %>% 
   step_center(all_numeric_predictors()) %>% 
   step_scale(all_numeric_predictors())
 
@@ -28,7 +28,7 @@ birth_rec1 %>%
 birth_rec2 <- birth_train %>% 
   recipe(dbwt ~ .) %>% 
   step_dummy(all_nominal_predictors(), one_hot = TRUE) %>% 
-  step_nzv()
+  step_nzv(all_predictors())
 
 birth_rec2 %>% 
   prep() %>% 

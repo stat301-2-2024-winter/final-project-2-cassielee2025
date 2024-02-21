@@ -40,4 +40,4 @@ lm_fit %>%
   collect_metrics()
 
 # save fit ----
-save(lm_fit, file = here("fits/lm_fit.rda"))
+save(lm_fit, file = here("results/lm_fit.rda"))
