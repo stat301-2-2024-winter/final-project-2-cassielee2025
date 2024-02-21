@@ -30,14 +30,6 @@ birth_test <- birth_split %>%
 
 # vfold cross validation resampling ----
 
-# how many folds and repeats?
-# training set has 30,000 observations
-# if i do 5 folds, 25,000 observations for training 5,000 for getting metrics
-# if i do 5 folds and 3 repeats, that is 15 models
-# it takes my computer 1.25 minutes to run 50 rf models with 300 training observations and 14 predictors
-# generous estimation means it should take 375 minutes (6.25) to run 15 rf models with 30,000 training observations
-# that should be ok???
-
 # set seed
 set.seed(9813274)
 
