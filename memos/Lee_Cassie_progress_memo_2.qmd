@@ -55,18 +55,17 @@ split_dimensions %>%
 
 The training data was then resampled using vfold cross validation with 5 folds and 3 repeats, so each model/workflow will be trained/fit 15 times for a metric estimate and standard error.
 
+### Model Types
 
-**Model Types**
+### Recipes
 
-**Recipes**
-
-**Metrics**
+### Metrics
 
 ## Two Model Types
 
-**Null/base Model**
+### Null/base Model
 
-**Standard Linear Regression**
+### Standard Linear Regression
 
 ## Exploratory Data Analysis
 
