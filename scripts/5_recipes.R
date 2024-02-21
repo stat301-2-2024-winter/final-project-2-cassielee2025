@@ -14,7 +14,6 @@ load(here("data/data_split/birth_train.rda"))
 # recipe for linear and elastic net
 birth_rec1 <- birth_train %>% 
   recipe(dbwt ~ .) %>% 
-  step_impute_knn(all_numeric_predictors()) %>% 
   step_dummy(all_nominal_predictors()) %>% 
   step_nzv() %>% 
   step_center(all_numeric_predictors()) %>% 
@@ -29,7 +28,6 @@ birth_rec1 %>%
 birth_rec2 <- birth_train %>% 
   recipe(dbwt ~ .) %>% 
   step_dummy(all_nominal_predictors(), one_hot = TRUE) %>% 
-  step_impute_knn(all_numeric_predictors()) %>% 
   step_nzv()
 
 birth_rec2 %>% 
