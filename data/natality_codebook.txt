@@ -19,16 +19,16 @@ mager       | mother's single years of age               | 12 10 – 12 years; 1
 mbstate_rec | mother's nativity                          | 1 Born in the U.S. (50 US States); 2 Born outside the U.S. (includes possessions); 3 Unknown or Not Stated
 meduc       | mother's education                         | 1 8th grade or less; 2 9th through 12th grade with no diploma; 3 High school graduate or GED completed; 4 Some college credit| but not a degree.; 5 Associate degree (AA|AS); 6 Bachelor’s degree (BA| AB| BS); 7 Master’s degree (MA| MS| MEng| MEd| MSW| MBA); 8 Doctorate (PhD| EdD) or Professional Degree (MD| DDS| DVM| LLB| JD); 9 Unknown
 m_ht_in     | mother's height in total inches            | 30-78 Height in inches; 99 Unknown or not stated
-no_infec    | no infections reportedn                    | 1 True; 0 False; 9 Not Reported
+no_infec    | no infections reported                     | 1 True; 0 False; 9 Not Reported
 no_mmorb    | no maternal morbidity reported             | 1 True; 0 False; 9 Not Reported
 no_risks    | no risk factors reported                   | 1 True; 0 False; 9 Not Reported
 pay         | payment source for delivery                | 1 Medicaid; 2 Private Insurance; 3 Self-Pay; 4 Indian Health Service; 5 CHAMPUS/TRICARE; 6 Other Government (Federal| State| Local); 8 Other; 9 Unknown
 pay_rec     | payment recode                             | 1 Medicaid; 2 Private Insurance; 3 Self Pay; 4 Other; 9 Unknown
 precare     | month prenatal care began                  | 00 No prenatal care; 01-10 Month prenatal care began; 99 Unknown or not stated
 previs      | number of prenatal visits                  | 00-98 Number of prenatal visits; 99 Unknown or not stated
-priordead   | prior births now dead                      | 00-30 Number of children dead from previous live births.; 99 Unknown or not stated
-priorlive   | prior births now living                    | 00-30 Number of children dead from previous live births.; 99 Unknown or not stated
-priorterm   | prior other terminations                   | 00-30 Number of children dead from previous live births.; 99 Unknown or not stated
+priordead   | prior births now dead                      | 00-30 Number of children dead from previous live births; 99 Unknown or not stated
+priorlive   | prior births now living                    | 00-30 Number of children still living from previous live births; 99 Unknown or not stated
+priorterm   | prior other terminations                   | 00-30 Number other terminations; 99 Unknown or not stated
 p_wgt_r     | pre-pregnancy weight recode                | 075-375 Weight in pounds; 999 Unknown or not stated
 rdmeth_rec  | delviery method recode                     | 1 Vaginal (excludes vaginal after previous C-section); 2 Vaginal after previous c-section; 3 Primary C-section; 4 Repeat C-section; 5 Vaginal (unknown if previous c-section); 6 C-section (unknown if previous c-section); 9 Not stated
 restatus    | residence status                           | 1 RESIDENT: State and county of occurrence and residence are the same.; 2 INTRASTATE NONRESIDENT: State of occurrence and residence are the same but county is different.; 3 INTERSTATE NONRESIDENT: State of occurrence and residence are different but both are one of the 50 US states or District of Columbia.; 4 FOREIGN RESIDENT: The state of residence is not one of the 50 US states or District of Columbia.
