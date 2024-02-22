@@ -50,14 +50,29 @@ split_dimensions %>%
   kable()
 ```
 
-
 ### Resampling
 
-The training data was then resampled using vfold cross validation with 5 folds and 3 repeats, so each model/workflow will be trained/fit 15 times for a metric estimate and standard error.
+The training data was then resampled using vfold cross validation with 5 folds and 3 repeats, so each model/workflow will be trained/fit 15 times for a metric estimate and standard error. In each iteration of the model/workflow, about 24,000 observations will be used to train and 6,000 observations will be used to obtain an estimate for the performance of the model. 
+
+### Recipes
+
+I have set up similar/corresponding recipes for preprocessing data for linear and tree based models. 
+
+When initially subsetting the data, I only selected complete observations. However, some variables such as `illb_r`, `ilop_r`, `ilp_r`, and `precare` contained multiple types of information. `illb_r`, `ilop_r`, and `ilp_r` contained information about whether or not the delivery was a plural delivery or not, as well as the interval since the last live birth, the interval since the last other pregnancy, and the interval since the last pregnancy, respectively. `precare` contained information about whether or not the mother received prenatal care, as well as how many months into the pregnancy the mother began receiving prenatal care. To handle this, I created two new variables, `plural_del` and `any_precare` as logical variables to encode whether or not the delivery was a plural delivery and whether or not the mother received prenatal care. 
+
+For both models, I have used `step_unknown()` to assign
+
+(one hot encoding dummy variables for tree based models).
 
 ### Model Types
 
-### Recipes
+The model types I will train/fit  are elastic net, random forest, and boosted tree. I will use the basic similar recipes I have set up to create an initial tuned fit for each model type using resampled data. From this, I will identify the best model type.
+
+Then, I will adjust preprocessing steps and use this to create competing models within the same model type, using the same hyperparameters that was identified in the previous analysis. From this, I will idenitfy the best recipe to use. 
+
+Then, I will tune the model type again using the best recipe to identify the best hyperparameters to use for my final model/workflow. 
+
+
 
 ### Metrics
 

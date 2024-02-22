@@ -3037,8 +3037,8 @@ vertical-align: -.125em;
   <ul class="collapse">
   <li><a href="#data-splitting" id="toc-data-splitting" class="nav-link" data-scroll-target="#data-splitting">Data Splitting</a></li>
   <li><a href="#resampling" id="toc-resampling" class="nav-link" data-scroll-target="#resampling">Resampling</a></li>
-  <li><a href="#model-types" id="toc-model-types" class="nav-link" data-scroll-target="#model-types">Model Types</a></li>
   <li><a href="#recipes" id="toc-recipes" class="nav-link" data-scroll-target="#recipes">Recipes</a></li>
+  <li><a href="#model-types" id="toc-model-types" class="nav-link" data-scroll-target="#model-types">Model Types</a></li>
   <li><a href="#metrics" id="toc-metrics" class="nav-link" data-scroll-target="#metrics">Metrics</a></li>
   </ul></li>
   <li><a href="#two-model-types" id="toc-two-model-types" class="nav-link" data-scroll-target="#two-model-types">Two Model Types</a>
@@ -3137,13 +3137,20 @@ Github Repo Link
 </section>
 <section id="resampling" class="level3">
 <h3 class="anchored" data-anchor-id="resampling">Resampling</h3>
-<p>The training data was then resampled using vfold cross validation with 5 folds and 3 repeats, so each model/workflow will be trained/fit 15 times for a metric estimate and standard error.</p>
-</section>
-<section id="model-types" class="level3">
-<h3 class="anchored" data-anchor-id="model-types">Model Types</h3>
+<p>The training data was then resampled using vfold cross validation with 5 folds and 3 repeats, so each model/workflow will be trained/fit 15 times for a metric estimate and standard error. In each iteration of the model/workflow, about 24,000 observations will be used to train and 6,000 observations will be used to obtain an estimate for the performance of the model.</p>
 </section>
 <section id="recipes" class="level3">
 <h3 class="anchored" data-anchor-id="recipes">Recipes</h3>
+<p>I have set up similar/corresponding recipes for preprocessing data for linear and tree based models.</p>
+<p>When initially subsetting the data, I only selected complete observations. However, some variables such as <code>illb_r</code>, <code>ilop_r</code>, <code>ilp_r</code>, and <code>precare</code> contained multiple types of information. <code>illb_r</code>, <code>ilop_r</code>, and <code>ilp_r</code> contained information about whether or not the delivery was a plural delivery or not, as well as the interval since the last live birth, the interval since the last other pregnancy, and the interval since the last pregnancy, respectively. <code>precare</code> contained information about whether or not the mother received prenatal care, as well as how many months into the pregnancy the mother began receiving prenatal care. To handle this, I created two new variables, <code>plural_del</code> and <code>any_precare</code> as logical variables to encode whether or not the delivery was a plural delivery and whether or not the mother received prenatal care.</p>
+<p>For both models, I have used <code>step_unknown()</code> to assign</p>
+<p>(one hot encoding dummy variables for tree based models).</p>
+</section>
+<section id="model-types" class="level3">
+<h3 class="anchored" data-anchor-id="model-types">Model Types</h3>
+<p>The model types I will train/fit are elastic net, random forest, and boosted tree. I will use the basic similar recipes I have set up to create an initial tuned fit for each model type using resampled data. From this, I will identify the best model type.</p>
+<p>Then, I will adjust preprocessing steps and use this to create competing models within the same model type, using the same hyperparameters that was identified in the previous analysis. From this, I will idenitfy the best recipe to use.</p>
+<p>Then, I will tune the model type again using the best recipe to identify the best hyperparameters to use for my final model/workflow.</p>
 </section>
 <section id="metrics" class="level3">
 <h3 class="anchored" data-anchor-id="metrics">Metrics</h3>
