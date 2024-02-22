@@ -13,7 +13,7 @@ tidymodels_prefer()
 load(here("data/data_split/birth_fold.rda"))
 
 # load pre-processing/feature engineering/recipe
-load(here("recipes/birth_rec1.rda"))
+load(here("recipes/birth_rec1a.rda"))
 
 # parallel processing ----
 num_cores <- parallel::detectCores(logical = TRUE)
@@ -29,7 +29,7 @@ lm_spec <-
 lm_wflow <- 
   workflow() %>% 
   add_model(lm_spec) %>% 
-  add_recipe(birth_rec1)
+  add_recipe(birth_rec1a)
 
 # fit to resampled data ----
 lm_fit <- lm_wflow %>% 
