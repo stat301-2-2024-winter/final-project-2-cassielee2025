@@ -17,8 +17,8 @@ birth_rec1 <- birth_train %>%
   step_unknown(all_nominal_predictors()) %>% 
   step_dummy(all_nominal_predictors()) %>% 
   step_nzv(all_predictors()) %>% 
-  step_center(all_numeric_predictors()) %>% 
-  step_scale(all_numeric_predictors())
+  step_scale(all_numeric_predictors()) %>% 
+  step_center(all_numeric_predictors()) 
 
 birth_rec1 %>% 
   prep() %>% 

@@ -58,25 +58,22 @@ The training data was then resampled using vfold cross validation with 5 folds a
 
 I have set up similar/corresponding recipes for preprocessing data for linear and tree based models. 
 
-When initially subsetting the data, I only selected complete observations. However, some variables such as `illb_r`, `ilop_r`, `ilp_r`, and `precare` contained multiple types of information. `illb_r`, `ilop_r`, and `ilp_r` contained information about whether or not the delivery was a plural delivery or not, as well as the interval since the last live birth, the interval since the last other pregnancy, and the interval since the last pregnancy, respectively. `precare` contained information about whether or not the mother received prenatal care, as well as how many months into the pregnancy the mother began receiving prenatal care. To handle this, I created two new variables, `plural_del` and `any_precare` as logical variables to encode whether or not the delivery was a plural delivery and whether or not the mother received prenatal care. 
+When initially subsetting the data, I only selected complete observations. However, some variables such as `illb_r`, `ilop_r`, `ilp_r`, and `precare` contained multiple types of information. `illb_r`, `ilop_r`, and `ilp_r` contained information about whether or not the delivery was a plural delivery or not, as well as the interval since the last live birth, the interval since the last other pregnancy, and the interval since the last pregnancy, respectively. `precare` contained information about whether or not the mother received prenatal care, as well as how many months into the pregnancy the mother began receiving prenatal care. To handle this, I created two new variables, `plural_del` and `any_precare` as logical variables to encode whether or not the delivery was a plural delivery and whether or not the mother received prenatal care. If there was a plural delivery, `illb_r`, `ilop_r`, and `ilp_r` was changed to `NA`, and if there was no prenatal care, `precare` was changed to `NA`.
 
-For both models, I have used `step_unknown()` to assign
-
-(one hot encoding dummy variables for tree based models).
+For both models, I am predicting birth weight from all other variables, used `step_unknown()` to assign the `NA` values into a separate unknown category, `step_dummy()` on all nominal predictors, and `step_nzv()` on all predictors. For tree based models, I used one hot encoding in `step_dummy()`. For linear models, I scaled and centered all numeric predictors.
 
 ### Model Types
 
 The model types I will train/fit  are elastic net, random forest, and boosted tree. I will use the basic similar recipes I have set up to create an initial tuned fit for each model type using resampled data. From this, I will identify the best model type.
 
-Then, I will adjust preprocessing steps and use this to create competing models within the same model type, using the same hyperparameters that was identified in the previous analysis. From this, I will idenitfy the best recipe to use. 
+Then, I will adjust preprocessing steps and use this to create competing models within the same model type, using the same hyperparameters that was identified in the previous analysis. From this, I will identify the best recipe to use. 
 
 Then, I will tune the model type again using the best recipe to identify the best hyperparameters to use for my final model/workflow. 
 
-
-
 ### Metrics
+The metrics I will use are RMSE and $R^2$. I am using RMSE over MAE partly because it is the default metric used in the `tune` package, but also because I would like to weigh larger errors more heavily in the performance estimate. This is because babies with a really low or really high birth weight can lead to birth complications. Thus, highly inaccurate predictions would fail to identify risks of low or high birth weight, which have significant health impacts.
 
-## Two Model Types
+## Two Basic Model Types
 
 ### Null/base Model
 
