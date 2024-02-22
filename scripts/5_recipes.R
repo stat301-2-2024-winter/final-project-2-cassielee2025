@@ -11,8 +11,11 @@ tidymodels_prefer()
 # load training set
 load(here("data/data_split/birth_train.rda"))
 
+################################################################################
+# basic recipes using variables as is ----
+################################################################################
 # recipe for linear and elastic net
-birth_rec1 <- birth_train %>% 
+birth_rec1a <- birth_train %>% 
   recipe(dbwt ~ .) %>% 
   step_unknown(all_nominal_predictors()) %>% 
   step_dummy(all_nominal_predictors()) %>% 
@@ -20,23 +23,28 @@ birth_rec1 <- birth_train %>%
   step_scale(all_numeric_predictors()) %>% 
   step_center(all_numeric_predictors()) 
 
-birth_rec1 %>% 
+birth_rec1a %>% 
   prep() %>% 
   bake(new_data = NULL) %>% 
   slice(1:5)
 
 # recipe for tree based models
-birth_rec2 <- birth_train %>% 
+birth_rec1b <- birth_train %>% 
   recipe(dbwt ~ .) %>% 
   step_unknown(all_nominal_predictors()) %>% 
   step_dummy(all_nominal_predictors(), one_hot = TRUE) %>% 
   step_nzv(all_predictors())
 
-birth_rec2 %>% 
+birth_rec1b %>% 
   prep() %>% 
   bake(new_data = NULL) %>% 
   slice(1:5)
 
 # save recipes 
-save(birth_rec1, file = here("recipes/birth_rec1.rda"))
-save(birth_rec2, file = here("recipes/birth_rec2.rda"))
+save(birth_rec1a, file = here("recipes/birth_rec1a.rda"))
+save(birth_rec1b, file = here("recipes/birth_recb.rda"))
+
+################################################################################
+# recipe using binary variables ----
+################################################################################
+
