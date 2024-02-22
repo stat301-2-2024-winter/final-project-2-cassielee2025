@@ -87,3 +87,11 @@ for(i in numeric_vars){
   plot_numeric(!! sym(i))
   
 }
+
+# make a correlation matrix ----
+library(corrplot)
+
+birth_eda %>% 
+  select(where(is.numeric)) %>% 
+  cor() %>% 
+  corrplot()
