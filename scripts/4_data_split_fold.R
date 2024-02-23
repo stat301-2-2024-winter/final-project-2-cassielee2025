@@ -40,7 +40,7 @@ birth_test <- birth_split %>%
 set.seed(9813274)
 
 birth_fold <- birth_train %>% 
-  vfold_cv(v = 5, repeats = 3, strata = dbwt)
+  vfold_cv(v = 5, repeats = 5, strata = dbwt)
 
 # save data splits 
 save(birth_train, file = here("data/data_split/birth_train.rda"))

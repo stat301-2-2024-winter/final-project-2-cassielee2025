@@ -13,21 +13,14 @@ birth_original <- read_csv(here("data/US_births(2018).csv")) %>%
 # create list of variables to select
 vars <- c(
   "dbwt",
-  "attend",
-  "bfacil",
-  "bmi",
   "cig_0",
-  "dlmp_mm",
   "dmar",
-  "dob_mm",
-  "dob_tt",
-  "dob_wk",
+  "dob_mm", # change to season
+  "dob_tt", # change to morning/night
   "fagecomb",
   "feduc",
   "illb_r",
-  "ilop_r",
   "ilp_r",
-  "ld_indl",
   "mager",
   "mbstate_rec",
   "meduc",
@@ -35,15 +28,12 @@ vars <- c(
   "no_infec",
   "no_mmorb",
   "no_risks",
-  "pay",
-  "pay_rec",
   "precare",
   "previs",
   "priordead",
   "priorlive",
   "priorterm",
   "p_wgt_r",
-  "rdmeth_rec",
   "restatus",
   "rf_cesar",
   "rf_cesarn",
@@ -56,36 +46,24 @@ birth_complete <- birth_original %>%
   select(all_of(vars)) %>% 
   mutate(
     dbwt = na_if(dbwt, 9999),
-    attend = na_if(attend, 9),
-    bfacil = na_if(bfacil, 9),
-    bmi = na_if(bmi, 99.9),
     cig_0 = na_if(cig_0, 99),
-    dlmp_mm = na_if(dlmp_mm, 99),
     dob_tt = na_if(dob_tt, 9999),
     fagecomb = na_if(fagecomb, 99),
     feduc = na_if(feduc, 9),
-    illb_r = na_if(illb_r, 888),
     illb_r = na_if(illb_r, 999),
-    ilop_r = na_if(ilop_r, 888),
-    ilop_r = na_if(ilop_r, 999),
-    ilp_r = na_if(ilp_r, 888),
     ilp_r = na_if(ilp_r, 999),
-    ld_indl = na_if(ld_indl, "U"),
     mbstate_rec = na_if(mbstate_rec, 3),
     meduc = na_if(meduc, 9),
     m_ht_in = na_if(m_ht_in, 99),
     no_infec  = na_if(no_infec, 9),
     no_mmorb = na_if(no_mmorb, 9),
     no_risks = na_if(no_risks, 9),
-    pay  = na_if(pay, 9),
-    pay_rec = na_if(pay_rec, 9),
     precare = na_if(precare, 99),
     previs = na_if(previs, 99),
     priordead = na_if(priordead, 99),
     priorlive = na_if(priorlive, 99),
     priorterm = na_if(priorterm, 99),
     p_wgt_r = na_if(p_wgt_r, 999),
-    rdmeth_rec = na_if(rdmeth_rec, 9),
     rf_cesar = na_if(rf_cesar, "U"),
     # convert number of cesarean to from character to numeric
     rf_cesarn = as.numeric(rf_cesarn),
@@ -104,64 +82,87 @@ show_birth_read_in <- birth_complete %>%
 set.seed(1293847982)
 
 birth_data <- birth_complete %>% 
-  slice_sample(n = 60000)
+  slice_sample(n = 45000)
 
 # check variable types and create new variable from variables that contain multiple
 # types of information
 birth_data <- birth_data %>% 
-  # change categorical variables from numeric/character to factor
+  ## change categorical variables from numeric/character to factor
   mutate(
-    attend = factor(attend),
-    bfacil = factor(bfacil),
-    dlmp_mm = factor(dlmp_mm),
     dmar = factor(dmar),
     dob_mm = factor(dob_mm),
-    dob_wk = factor(dob_wk),
     feduc = factor(feduc),
-    ld_indl = factor(ld_indl),
     mbstate_rec = factor(mbstate_rec),
     meduc = factor(meduc),
     no_infec = factor(no_infec),
     no_mmorb = factor(no_mmorb),
     no_risks = factor(no_risks),
-    pay = factor(pay),
-    pay_rec = factor(pay_rec),
-    rdmeth_rec = factor(rdmeth_rec),
     restatus = factor(restatus),
     rf_cesar = factor(rf_cesar), 
     sex = factor(sex)
   ) %>%
-  # for illb_r, ilop_r, ilp_r, 000-003 is plural delivery, not describing an interval
+  
+  ## is this a person's first birth or first pregnancy?
   mutate(
-    # if illb_r, ilop_r, ilp_r is between 000-003, label as true (plural delivery)
+    # if illb_r is 888, true (first birth)
+    first_birth = if_else(illb_r == 888, TRUE, FALSE),
+    
+    # if ilp_r is 888, true (first pregnancy)
+    first_preg = if_else(ilp_r == 888, TRUE, FALSE)
+  ) %>%
+  
+  ## for illb_r or ilp_r, 000-003 is plural delivery, not describing an interval
+  # was this a plural delivery?
+  mutate(
+    # if illb_r or ilp_r is between 000-003, label as true (plural delivery)
     plural_del = if_else(
       illb_r %in% c(000, 001, 002, 003) |
-        ilop_r %in% c(000, 001, 002, 003) |
         ilp_r %in% c(000, 001, 002, 003),
       TRUE,
       FALSE
     ),
-    # if illb_r, ilop_r, ilp_r is between 000-003, change to NA
+    # if illb_r or ilp_r is between 000-003, change to NA
     illb_r = na_if(illb_r, 000),
     illb_r = na_if(illb_r, 001),
     illb_r = na_if(illb_r, 002),
     illb_r = na_if(illb_r, 003),
-    ilop_r = na_if(ilop_r, 000),
-    ilop_r = na_if(ilop_r, 001),
-    ilop_r = na_if(ilop_r, 002),
-    ilop_r = na_if(ilop_r, 003),
-    ilp_r = na_if(ilop_r, 000),
-    ilp_r = na_if(ilop_r, 001),
-    ilp_r = na_if(ilop_r, 002),
-    ilp_r = na_if(ilop_r, 003),
+    ilp_r = na_if(ilp_r, 000),
+    ilp_r = na_if(ilp_r, 001),
+    ilp_r = na_if(ilp_r, 002),
+    ilp_r = na_if(ilp_r, 003),
   ) %>% 
-  # for precare, 00 is no prenatal care, not describing when prenatal care began
+  
+  ## for precare, 00 is no prenatal care, not describing when prenatal care began
+  # did the person receive prenatal care
   mutate(
     # if there precare is 00, label as false
     any_precare = if_else(precare == 00, FALSE, TRUE),
     # if there precare is 00, change to NA
     precare = na_if(precare, 00)
-  )
+  ) %>% 
+  
+  ## change dob_mm and dob_tt to seasons and am/pm
+  mutate(
+    #change dob_mm to seasons
+    dob_season = case_when(
+      dob_mm %in% c(12, 1, 2) ~ "winter",
+      dob_mm %in% c(3, 4, 5) ~ "spring",
+      dob_mm %in% c(6, 7, 8) ~ "summer",
+      dob_mm %in% c(9, 10, 11) ~ "fall",
+    ),
+    
+    dob_season = factor(dob_season),
+    
+    # change dob_tt to am/pm
+    dob_time = if_else(dob_tt <= 1159, "am", "pm"),
+    
+    dob_time = factor(dob_time)
+  ) %>% 
+  
+  # drop dob_mm, dob_tt
+  select(-c(dob_mm, dob_tt))
+  
+  
 
 # data quality check ----
 data_quality_check <- birth_data %>% 

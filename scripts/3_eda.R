@@ -33,9 +33,6 @@ plot_factor <- function(var){
   )
 }
 
-# # check that the function works
-# plot_factor(attend)
-
 # get list of factor variables
 factor_vars <- birth_eda %>% 
   select(where(is.factor), where(is.logical)) %>% 
@@ -49,12 +46,12 @@ for(i in factor_vars){
 
 }
 
-# factor variables ----
+# numeric variables ----
 
-# function for plotting factor variables
+# function for plotting numeric variables
 plot_numeric <- function(var){
   
-  # create boxplot between factor variable and birthweight
+  # create scatterplot between numeric variable and birthweight
   birth_eda %>% 
     ggplot(aes({{  var  }}, dbwt)) +
     geom_point(alpha = 0.1) +
@@ -71,9 +68,6 @@ plot_numeric <- function(var){
     path = here("eda_output/")
   )
 }
-
-# # check that the function works
-# plot_numeric(bmi)
 
 # get list of numeric variables
 numeric_vars <- birth_eda %>% 
