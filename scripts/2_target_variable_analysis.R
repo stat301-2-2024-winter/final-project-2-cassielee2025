@@ -10,10 +10,10 @@ load(here("data/birth_data.rda"))
 
 # split data into eda data and modeling data
 birth_eda <- birth_data %>% 
-  slice(1:20000)
+  slice(1:15000)
 
 birth_model_data <- birth_data %>% 
-  slice(20001:40000)
+  slice(15001:30000)
 
 # target variable analysis 
 

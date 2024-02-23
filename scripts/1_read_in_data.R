@@ -73,7 +73,7 @@ show_birth_read_in <- birth_complete %>%
 set.seed(1293847982)
 
 birth_data <- birth_complete %>% 
-  slice_sample(n = 40000)
+  slice_sample(n = 30000)
 
 # check variable types and create new variable from variables that contain multiple
 # types of information
@@ -85,7 +85,6 @@ birth_data <- birth_data %>%
     no_infec = factor(no_infec),
     no_mmorb = factor(no_mmorb),
     no_risks = factor(no_risks),
-    rf_cesar = factor(rf_cesar), 
     sex = factor(sex)
   ) %>%
   
