@@ -18,7 +18,7 @@ load(here("recipes/birth_rec1b.rda"))
 
 # parallel processing ----
 num_cores <- parallel::detectCores(logical = TRUE)
-registerDoMC(cores = num_cores - 1)
+registerDoMC(cores = num_cores - 2)
 
 # model specifications ----
 bt_spec <- 
@@ -45,7 +45,7 @@ hardhat::extract_parameter_set_dials(bt_spec)
 # change hyperparameter ranges
 bt_param <- extract_parameter_set_dials(bt_spec) %>% 
   update(
-    mtry = mtry(c(1, 60)),
+    mtry = mtry(c(1, 30)),
     min_n = min_n(c(2, 50)),
     learn_rate = learn_rate(range = c(-5, -0.2)),
     trees = trees(c(1, 3000))

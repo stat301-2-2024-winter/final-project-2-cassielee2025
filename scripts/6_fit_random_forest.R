@@ -17,7 +17,7 @@ load(here("recipes/birth_rec2.rda"))
 
 # parallel processing ----
 num_cores <- parallel::detectCores(logical = TRUE)
-registerDoMC(cores = num_cores - 1)
+registerDoMC(cores = num_cores - 2)
 
 # model specifications ----
 rf_rec <- 

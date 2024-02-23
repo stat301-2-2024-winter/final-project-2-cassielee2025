@@ -14,15 +14,11 @@ birth_original <- read_csv(here("data/US_births(2018).csv")) %>%
 vars <- c(
   "dbwt",
   "cig_0",
-  "dmar",
-  "dob_mm", # change to season
-  "dob_tt", # change to morning/night
   "fagecomb",
   "feduc",
   "illb_r",
   "ilp_r",
   "mager",
-  "mbstate_rec",
   "meduc",
   "m_ht_in",
   "no_infec",
@@ -34,8 +30,6 @@ vars <- c(
   "priorlive",
   "priorterm",
   "p_wgt_r",
-  "restatus",
-  "rf_cesar",
   "rf_cesarn",
   "sex",
   "wtgain"
@@ -47,12 +41,10 @@ birth_complete <- birth_original %>%
   mutate(
     dbwt = na_if(dbwt, 9999),
     cig_0 = na_if(cig_0, 99),
-    dob_tt = na_if(dob_tt, 9999),
     fagecomb = na_if(fagecomb, 99),
     feduc = na_if(feduc, 9),
     illb_r = na_if(illb_r, 999),
     ilp_r = na_if(ilp_r, 999),
-    mbstate_rec = na_if(mbstate_rec, 3),
     meduc = na_if(meduc, 9),
     m_ht_in = na_if(m_ht_in, 99),
     no_infec  = na_if(no_infec, 9),
@@ -64,7 +56,6 @@ birth_complete <- birth_original %>%
     priorlive = na_if(priorlive, 99),
     priorterm = na_if(priorterm, 99),
     p_wgt_r = na_if(p_wgt_r, 999),
-    rf_cesar = na_if(rf_cesar, "U"),
     # convert number of cesarean to from character to numeric
     rf_cesarn = as.numeric(rf_cesarn),
     rf_cesarn = na_if(rf_cesarn, 99),
@@ -82,22 +73,18 @@ show_birth_read_in <- birth_complete %>%
 set.seed(1293847982)
 
 birth_data <- birth_complete %>% 
-  slice_sample(n = 45000)
+  slice_sample(n = 40000)
 
 # check variable types and create new variable from variables that contain multiple
 # types of information
 birth_data <- birth_data %>% 
   ## change categorical variables from numeric/character to factor
   mutate(
-    dmar = factor(dmar),
-    dob_mm = factor(dob_mm),
     feduc = factor(feduc),
-    mbstate_rec = factor(mbstate_rec),
     meduc = factor(meduc),
     no_infec = factor(no_infec),
     no_mmorb = factor(no_mmorb),
     no_risks = factor(no_risks),
-    restatus = factor(restatus),
     rf_cesar = factor(rf_cesar), 
     sex = factor(sex)
   ) %>%
@@ -139,29 +126,7 @@ birth_data <- birth_data %>%
     any_precare = if_else(precare == 00, FALSE, TRUE),
     # if there precare is 00, change to NA
     precare = na_if(precare, 00)
-  ) %>% 
-  
-  ## change dob_mm and dob_tt to seasons and am/pm
-  mutate(
-    #change dob_mm to seasons
-    dob_season = case_when(
-      dob_mm %in% c(12, 1, 2) ~ "winter",
-      dob_mm %in% c(3, 4, 5) ~ "spring",
-      dob_mm %in% c(6, 7, 8) ~ "summer",
-      dob_mm %in% c(9, 10, 11) ~ "fall",
-    ),
-    
-    dob_season = factor(dob_season),
-    
-    # change dob_tt to am/pm
-    dob_time = if_else(dob_tt <= 1159, "am", "pm"),
-    
-    dob_time = factor(dob_time)
-  ) %>% 
-  
-  # drop dob_mm, dob_tt
-  select(-c(dob_mm, dob_tt))
-  
+  ) 
   
 
 # data quality check ----

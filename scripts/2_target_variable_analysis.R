@@ -13,7 +13,7 @@ birth_eda <- birth_data %>%
   slice(1:20000)
 
 birth_model_data <- birth_data %>% 
-  slice(20001:45000)
+  slice(20001:40000)
 
 # target variable analysis 
 
