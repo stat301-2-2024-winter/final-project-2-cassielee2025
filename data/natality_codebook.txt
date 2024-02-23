@@ -1,38 +1,22 @@
 variable    | description                                | notes
 dbwt        | birthweight                                | 0227-8165 Number of grams; 9999 Not stated birth weight
-attend      | attendant at birth                         | 1 Doctor of Medicine (MD); 2 Doctor of Osteopathy (DO); 3 Certified Nurse Midwife (CNM); 4 Other Midwife; 5 Other; 9 Unknown or not stated
-bfacil      | birth place                                | 1 Hospital; 2 Freestanding Birth Center; 3 Home (intended); 4 Home (not intended); 5 Home (unknown if intended); 6 Clinic / Doctor’s Office; 7 Other; 9 Unknown
-bmi         | body mass index                            | 13.0-69.9 Body Mass Index; 282 99.9 Unknown or not stated
 cig_0       | cigarettes before pregnancy                | 00-97 Number of cigarettes daily; 98 98 or more cigarettes daily; 99 Unknown or not stated
-dlmp_mm     | last normal menses month                   | 01 January; 02 February; 03 March; 04 April; 05 May; 06 June; 07 July; 08 August; 09 September; 10 October; 11 November; 12 December; 99 Unknown or not stated
-dmar        | marital status                             | 1 Married; 2 Unmarried
-dob_mm      | birth month                                | 1 January; 02 February; 03 March; 04 April; 05 May; 06 June; 07 July; 08 August; 09 September; 10 October; 11 November; 12 December
-dob_tt      | time of birth                              | 0000-2359 Time of Birth; 9999 Not Stated
-dob_wk      | birth day of week                          | 1 Sunday;  2 Monday; 3 Tuesday; 4 Wednesday; 5 Thursday; 6 Friday; 7 Saturday
 fagecomb    | father's combined age                      | 09-98 Father’s combined age in years; 99 Unknown or not stated
 feduc       | father's education                         | 1 8th grade or less; 2 9th through 12th grade with no diploma; 3 High school graduate or GED completed; 4 Some college credit| but not a degree.; 5 Associate degree (AA|AS); 6 Bachelor’s degree (BA| AB| BS); 7 Master’s degree (MA| MS| MEng| MEd| MSW| MBA); 8 Doctorate (PhD| EdD) or Professional Degree (MD| DDS| DVM| LLB| JD); 9 Unknown
 illb_r      | interval since last live birth recode      | 000-003 Plural delivery; 004-300 Months since last live birth; 888 Not applicable / 1st live birth; 999 Unknown or not stated
-ilop_r      | interval since last other pregnancy recode | 000-003 Plural delivery; 004-300 Months since last live birth; 888 Not applicable / 1st natality event; 999 Unknown or not stated
 ilp_r       | interval since last pregnancy recode       | 000-003 Plural delivery; 004-300 Months since last live birth; 888 Not applicable / 1st natality event; 999 Unknown or not stated
-ld_indl     | induction of labor                         | Y Yes; N No; U Unknown or not stated
 mager       | mother's single years of age               | 12 10 – 12 years; 13 13 years; 14 14 years; 15 15 years; 16 16 years; 17 17 years; 18 18 years; 19 19 years; 20 20 years; 21 21 years; 22 22 years; 23 23 years; 24 24 years; 25 25 years; 26 26 years; 27 27 years; 28 28 years; 29 29 years; 30 30 years; 31 31 years; 32 32 years; 33 33 years; 34 34 years; 35 35 years; 36 36 years; 37 37 years; 38 38 years; 39 39 years; 40 40 years; 41 41 years; 42 42 years; 43 43 years; 44 44 years; 45 45 years; 46 46 years; 47 47 years; 48 48 years; 49 49 years; 50 50 years and over
-mbstate_rec | mother's nativity                          | 1 Born in the U.S. (50 US States); 2 Born outside the U.S. (includes possessions); 3 Unknown or Not Stated
 meduc       | mother's education                         | 1 8th grade or less; 2 9th through 12th grade with no diploma; 3 High school graduate or GED completed; 4 Some college credit| but not a degree.; 5 Associate degree (AA|AS); 6 Bachelor’s degree (BA| AB| BS); 7 Master’s degree (MA| MS| MEng| MEd| MSW| MBA); 8 Doctorate (PhD| EdD) or Professional Degree (MD| DDS| DVM| LLB| JD); 9 Unknown
 m_ht_in     | mother's height in total inches            | 30-78 Height in inches; 99 Unknown or not stated
 no_infec    | no infections reported                     | 1 True; 0 False; 9 Not Reported
 no_mmorb    | no maternal morbidity reported             | 1 True; 0 False; 9 Not Reported
 no_risks    | no risk factors reported                   | 1 True; 0 False; 9 Not Reported
-pay         | payment source for delivery                | 1 Medicaid; 2 Private Insurance; 3 Self-Pay; 4 Indian Health Service; 5 CHAMPUS/TRICARE; 6 Other Government (Federal| State| Local); 8 Other; 9 Unknown
-pay_rec     | payment recode                             | 1 Medicaid; 2 Private Insurance; 3 Self Pay; 4 Other; 9 Unknown
 precare     | month prenatal care began                  | 00 No prenatal care; 01-10 Month prenatal care began; 99 Unknown or not stated
 previs      | number of prenatal visits                  | 00-98 Number of prenatal visits; 99 Unknown or not stated
 priordead   | prior births now dead                      | 00-30 Number of children dead from previous live births; 99 Unknown or not stated
 priorlive   | prior births now living                    | 00-30 Number of children still living from previous live births; 99 Unknown or not stated
 priorterm   | prior other terminations                   | 00-30 Number other terminations; 99 Unknown or not stated
 p_wgt_r     | pre-pregnancy weight recode                | 075-375 Weight in pounds; 999 Unknown or not stated
-rdmeth_rec  | delviery method recode                     | 1 Vaginal (excludes vaginal after previous C-section); 2 Vaginal after previous c-section; 3 Primary C-section; 4 Repeat C-section; 5 Vaginal (unknown if previous c-section); 6 C-section (unknown if previous c-section); 9 Not stated
-restatus    | residence status                           | 1 RESIDENT: State and county of occurrence and residence are the same.; 2 INTRASTATE NONRESIDENT: State of occurrence and residence are the same but county is different.; 3 INTERSTATE NONRESIDENT: State of occurrence and residence are different but both are one of the 50 US states or District of Columbia.; 4 FOREIGN RESIDENT: The state of residence is not one of the 50 US states or District of Columbia.
-rf_cesar    | previous cesarean                          | Y Yes; N No; U Unknown or not stated
 rf_cesarn   | number of previous cesarean                | 00 None; 01-30 Number of previous cesareans; 99 Unknown or not stated
 sex         | sex of infant                              | M Male; F Female
 wtgain      | weight gain                                | 00-97 Weight gain in pounds; 98 98 pounds and over; 99 Unknown or not stated
