@@ -5,3 +5,4 @@ This prediction project seeks to predict whether or not a person will give birth
 - `data\`: raw data file, subsetted data, codebooks
 - `memos\`: project memos
 - `scripts\`: .R scripts documenting workflows
+- `results\`: .rda files with fit results and metrics

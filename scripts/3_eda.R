@@ -3,6 +3,7 @@
 # load packages
 library(tidyverse)
 library(here)
+library(corrplot)
 
 # load EDA data
 load(here("data/data_split/birth_eda.rda"))
@@ -29,7 +30,7 @@ plot_factor <- function(var){
   ggsave(
     file_name, 
     plot = last_plot(), 
-    path = here("eda_output/")
+    path = here("memos/memo2_outputs/eda_outputs")
   )
 }
 
@@ -65,7 +66,7 @@ plot_numeric <- function(var){
   ggsave(
     file_name, 
     plot = last_plot(), 
-    path = here("eda_output/")
+    path = here("memos/memo2_outputs/eda_outputs")
   )
 }
 
@@ -83,8 +84,6 @@ for(i in numeric_vars){
 }
 
 # make a correlation matrix ----
-library(corrplot)
-
 birth_eda %>% 
   select(where(is.numeric)) %>% 
   cor() %>% 

@@ -7,4 +7,5 @@ Files:
 - `references.bib`: Zotero references used in progress memo 1
 
 Folders:
-- `\memo1_outputs`: .rda files to load directly into progress memos
+- `memo1_outputs\`: .rda files to load directly into progress memo 1
+- `memo2_outputs\`: .rda files to load directly into progress memo 2

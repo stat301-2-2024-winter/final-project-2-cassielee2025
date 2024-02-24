@@ -8,13 +8,13 @@ The original dataset has been added to the `.gitignore` file in the main project
 
 37 variables (including target variable) were selected from the original dataset according to the variables selected for the [Kaggle Prediction interval competition I: Birth weight competition](https://www.kaggle.com/competitions/prediction-interval-competition-i-birth-weight/data). These variables were selected to match the Kaggle competition to simplify the processes of identifying predictors to be used in the models. 
 
-Missing and not applicable values (ex: 3, 9, 99, 99.9, 9999, "U") from the original dataset were converted to `NA` values, and incomplete observations were removed from the dataset. 
+Missing values (ex: 3, 9, 99, 99.9, 9999, "U") from the original dataset were converted to `NA` values, and incomplete observations were removed from the dataset. 
 
-60,000 observations were then randomly sampled form the original dataset for use in exploratory data analysis, training models, and testing models. 
+30,000 observations were then randomly sampled form the original dataset for use in exploratory data analysis, training models, and testing models. 
 
 The target variable is birth weight, `dbwt`.
 
-Two variables, `plural_del` and `any_precare` are logical variables created from the variables `illb_r`, `ilop_r`,  `ilp_r`, and `precare` because these variables contained multiple types of information (i.e. whether or not there was prenatal care and what month the care began). `plural_del` refers to whether or not the pregnancy resulted in a plural delivery. `any_precare` refers to whether or not there was any prenatal care.
+Two variables, `plural_del` and `any_precare` are logical variables created from the variables `illb_r`, `ilp_r`, and `precare` because these variables contained multiple types of information (i.e. whether or not there was prenatal care and what month the care began). `plural_del` refers to whether or not the pregnancy resulted in a plural delivery. `any_precare` refers to whether or not there was any prenatal care.
 
 ## Data splits (`data_split/`)
 The subsetted observations with split into two datasets. These datasets are mutually exclusive. This also contains the training, testing, and resampled datasets.

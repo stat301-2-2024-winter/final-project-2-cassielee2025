@@ -25,8 +25,11 @@ bibliography: references.bib
 #| label: load-packages-data
 
 library(tidyverse)
+library(tidymodels)
 library(here)
 library(knitr)
+
+tidymodels_prefer()
 ```
 
 ::: {.callout-tip icon="false"}
@@ -39,7 +42,7 @@ library(knitr)
 
 ### Data Splitting
 
-The 40,000 observations used for this prediction problem was split using a 75/25 split between training and testing data, stratified by birth weight.
+The 15,000 observations used for this prediction problem was split using a 75/25 split between training and testing data, stratified by birth weight. 
 
 ```{r}
 #| label: data-split
@@ -52,33 +55,71 @@ split_dimensions %>%
 
 ### Resampling
 
-The training data was then resampled using vfold cross validation with 5 folds and 3 repeats, so each model/workflow will be trained/fit 15 times for a metric estimate and standard error. In each iteration of the model/workflow, about 24,000 observations will be used to train and 6,000 observations will be used to obtain an estimate for the performance of the model. 
+The training data was then resampled using vfold cross validation with 4 folds and 3 repeats, so each model/workflow will be trained/fit 12 times for a metric estimate and standard error. In each iteration of the model/workflow, about 11,250 observations will be used to train and 3,750 observations will be used to obtain an estimate for the performance of the model. 
 
 ### Recipes
 
-I have set up similar/corresponding recipes for preprocessing data for linear and tree based models. 
+The first distinct recipe I have is a basic recipe that keeps variables as is. For the variables interval since last pregnancy and interval since last birth, there are NA values for those with plural deliveries. I changed these NA values to 0. For individuals who did not receive any prenatal care, I changed NA values to 10, essentially indicating negative amounts of prenatal care because imputing these NA values did not make sense. I removed variables that had exact linear correlations between them and variables that did not have any variance. For the recipe for linear models, I dummied all nominal predictors and scaled and centered all numeric predictors. For tree based models, I used one-hot encoding to dummy the variables.
 
-When initially subsetting the data, I only selected complete observations. However, some variables such as `illb_r`, `ilop_r`, `ilp_r`, and `precare` contained multiple types of information. `illb_r`, `ilop_r`, and `ilp_r` contained information about whether or not the delivery was a plural delivery or not, as well as the interval since the last live birth, the interval since the last other pregnancy, and the interval since the last pregnancy, respectively. `precare` contained information about whether or not the mother received prenatal care, as well as how many months into the pregnancy the mother began receiving prenatal care. To handle this, I created two new variables, `plural_del` and `any_precare` as logical variables to encode whether or not the delivery was a plural delivery and whether or not the mother received prenatal care. If there was a plural delivery, `illb_r`, `ilop_r`, and `ilp_r` was changed to `NA`, and if there was no prenatal care, `precare` was changed to `NA`.
-
-For both models, I am predicting birth weight from all other variables, used `step_unknown()` to assign the `NA` values into a separate unknown category, `step_dummy()` on all nominal predictors, and `step_nzv()` on all predictors. For tree based models, I used one hot encoding in `step_dummy()`. For linear models, I scaled and centered all numeric predictors.
+The second distinct recipe I have removes interval since last birth and interval since last pregnancy and just includes the variables of first birth or first pregnancy. It also operationalizes prenatal care as receiving prenatal care beginning in the first trimester or not. Interaction terms were used between receiving prenatal care beginning in the first trimester and the number of prenatal care visits as well as pre-pregnancy weight and weight gain during preganancy. Similar to the other recipe, I removed variables wit exact linear correlations, predictors lacking any variance, and made appropariate adjustments to the recipe between recipes for linear and tree based models.
 
 ### Model Types
 
-The model types I will train/fit  are elastic net, random forest, and boosted tree. I will use the basic similar recipes I have set up to create an initial tuned fit for each model type using resampled data. From this, I will identify the best model type.
+The model types I will train/fit  are elastic net, random forest, boosted tree, and a neural network model. I will use the basic similar recipes I have set up to create an initial tuned fit for each model type using resampled data. From this, I will identify the best model type.
 
-Then, I will adjust preprocessing steps and use this to create competing models within the same model type, using the same hyperparameters that was identified in the previous analysis. From this, I will identify the best recipe to use. 
+Then, I will fit the best model with the same hyperparameters identified in the first step using the second distinct recipe type to see if it makes a difference, particularly with the inclusion of interaction terms. From this, I will decide which recipe to use. 
 
-Then, I will tune the model type again using the best recipe to identify the best hyperparameters to use for my final model/workflow. 
+Finally, I will fit the best model using the full training dataset.
 
 ### Metrics
-The metrics I will use are RMSE and $R^2$. I am using RMSE over MAE partly because it is the default metric used in the `tune` package, but also because I would like to weigh larger errors more heavily in the performance estimate. This is because babies with a really low or really high birth weight can lead to birth complications. Thus, highly inaccurate predictions would fail to identify risks of low or high birth weight, which have significant health impacts.
+The metric I will use to identify the best model is RMSE. I am using RMSE over MAE partly because it is the default metric used in the `tune` package, but also because I would like to weigh larger errors more heavily in the performance estimate. This is because babies with a really low or really high birth weight can lead to birth complications. Thus, highly inaccurate predictions would fail to identify risks of low or high birth weight, which have significant health impacts.
 
-## Two Basic Model Types
+## Null Model and Standard Linear Regression
 
-### Null/base Model
+I have fit a null model and a standard linear regression using the basic recipe. The metrics of these models are shown below:
 
-### Standard Linear Regression
+```{r}
+#| label: null-linear-models
+#| echo: false
+
+load(here("results/null_fit.rda"))
+load(here("results/lm_fit.rda"))
+
+bind_rows(
+  "null" = null_fit %>% collect_metrics(),
+  "lm" = lm_fit %>% collect_metrics(),
+  .id = "model"
+) %>% 
+  filter(.metric == "rmse") %>% 
+  select(model, .metric, mean, n, std_err) %>% 
+  kable()
+```
 
 ## Exploratory Data Analysis
 
+Since I had so many observations available to use (over 3 million), I used 15,000 observations for a quick exploratory data analysis. I plotted each predictor against birth weight to see if there was any variation across the categories. From this analysis, what appears to be the strongest predictors of birth weight are whether or not the birth was a plural delivery (@fig-plural_del), the number of cigarettes smoked daily before pregnancy (@fig-cig_0), the mother's height (@fig-m_ht_in), the mother's pre-pregnancy weight (@fig-p_wgt_r), the number of prenatal visits (@fig-previs), and the mother's weight gain during pregnancy (@fig-wtgain). Other variables such as the number of prior children who are still living had relationships with birth weight, but the effect sizes were not as large.
+
+In my preprocessing steps, I had orginally used `step_nzv()` to remove predictors that had near zero variance, but realized that would remove variables such as whether or not the birth was a plural delivery. Since these variables seem to have a significant impact on birth weight, I chose to use `step_zv()` to ensure that predictors were not removed unless they truly did not have any variance. 
+
+::: {layout-ncol=2}
+
+![Plural delivery](memo2_outputs/eda_outputs/factor_plural_del.png){#fig-plural_del}
+
+![Daily cigarettes before pregancy](memo2_outputs/eda_outputs/numeric_cig_0.png){#fig-cig_0}
+
+![Mother's height](memo2_outputs/eda_outputs/numeric_m_ht_in.png){#fig-m_ht_in}
+
+![Mother's weight before pregnancy](memo2_outputs/eda_outputs/numeric_p_wgt_r.png){#fig-p_wgt_r}
+
+![Number of prenatal visits](memo2_outputs/eda_outputs/numeric_previs.png){#fig-previs}
+
+![Weight gain during pregnancy](memo2_outputs/eda_outputs/numeric_wtgain.png){#fig-wtgain}
+
+:::
+
 ## Progress Summary and Potential Issues
+
+I have started the tuning process for the elastic net and boosted tree models. Right now, the boosted tree model took a little over 2 hours to fit, so I plan to increase the number of searches in the random grid search for tuning. 
+
+The biggest issue I have right now is that I realized I cannot fit/train tree based models and charge my computer at the same time without it overheating. Because of this, I have reduced the number of observations and variables from my original analysis plan. I have also reduced the number of folds and repeats in resampling. With these reductions, I can fit the model in several hours, and my computer battery can last long enough to do so. 
+

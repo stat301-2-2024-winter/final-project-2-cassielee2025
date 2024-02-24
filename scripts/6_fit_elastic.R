@@ -50,7 +50,7 @@ en_param <- extract_parameter_set_dials(en_spec) %>%
 
 # build tuning grid
 set.seed(918345)
-en_grid <- grid_random(en_param, size = 30)
+en_grid <- grid_random(en_param, size = 100)
 
 # fit workflows/models ----
 # set seed

@@ -13,3 +13,5 @@ This folder contains all the .R scripts associated with the project.
 - `6_fit_lm.R`: fit linear model/workflow with resamples
 - `6_fit_random_forest.R`: fit random forest model/workflow with resamples
 - `6_fit_null.R`: fit null model/workflow with resamples
+- `6_fit_mlp.R`: fit neural network model/workflow with resamples
+
