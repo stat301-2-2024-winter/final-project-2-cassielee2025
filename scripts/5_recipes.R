@@ -72,13 +72,16 @@ save(birth_rec1a, file = here("recipes/birth_rec1a.rda"))
 save(birth_rec1b, file = here("recipes/birth_rec1b.rda"))
 
 ################################################################################
-# recipe using prenatal in first trimester care as a binary variable ----
-# removing illb_r and ilp_r, and interaction terms
+# recipe adding prenatal in first trimester care as a binary variable, interaction terms ----
 ################################################################################
 # recipe for linear, elastic net, and neural network models
 birth_rec2a <- birth_train %>% 
   recipe(dbwt ~ .) %>% 
   step_mutate(
+    
+    # change NA in interval (numeric) variables to 0 if plural delivery
+    across(c(illb_r, ilp_r), \(x) if_else(is.na(x), 0, x)),
+    
     # was there prenatal care beginning in the first trimester?
     first_tri_precare = case_when(
       is.na(precare) ~ FALSE,
@@ -86,15 +89,23 @@ birth_rec2a <- birth_train %>%
       precare > 3 ~ FALSE
     ),
     
+    # is the mother a teenager or over 35
+    age_risk = case_when(
+      mager <= 18 ~ TRUE, 
+      mager >= 35 ~ TRUE,
+      mager > 18 & mager < 35 ~ FALSE
+    ),
+    
     # change logical data type to character
-    across(c(first_tri_precare, plural_del, any_precare, first_birth, first_preg), as.character)
+    across(c(first_tri_precare, plural_del, any_precare, first_birth, first_preg, age_risk), as.character)
   ) %>% 
-  step_rm(precare, illb_r, ilp_r) %>% 
-  step_string2factor(first_tri_precare, plural_del, any_precare, first_birth, first_preg) %>% 
+  step_rm(precare) %>% 
+  step_string2factor(first_tri_precare, plural_del, any_precare, first_birth, first_preg, age_risk) %>% 
   step_unknown(all_nominal_predictors()) %>% 
   step_dummy(all_nominal_predictors()) %>% 
   step_zv(all_predictors()) %>% 
   step_lincomb(all_predictors()) %>% 
+  step_sqrt(all_numeric_predictors()) %>% 
   step_interact(
     # interaction between starting prenatal care early and number of prenatal visits
     ~ starts_with("first_tri_precare"):previs,
@@ -102,7 +113,19 @@ birth_rec2a <- birth_train %>%
   step_interact(
     # interaction between weight gain and pre-pregnancy weight
     ~ p_wgt_r:wtgain
-  ) %>% 
+  ) %>%
+  step_interact(
+    # interaction between plural delivery and weight gain
+    ~ starts_with("plural_del"):wtgain
+  ) %>%
+  step_interact(
+    # interaction between cigarettes and weight gain
+    ~ cig_0:wtgain
+  ) %>%
+  step_interact(
+    # interaction between risks and number of prenatal visits
+    ~ starts_with("no_risks"):previs
+  ) %>%
   step_scale(all_numeric_predictors()) %>% 
   step_center(all_numeric_predictors())
 
@@ -113,7 +136,12 @@ birth_rec2a %>%
 # recipe for tree based models
 birth_rec2b <- birth_train %>% 
   recipe(dbwt ~ .) %>% 
+  step_YeoJohnson(cig_0, p_wgt_r, wtgain) %>% 
   step_mutate(
+    
+    # change NA in interval (numeric) variables to 0 if plural delivery
+    across(c(illb_r, ilp_r), \(x) if_else(is.na(x), 0, x)),
+    
     # was there prenatal care beginning in the first trimester?
     first_tri_precare = case_when(
       is.na(precare) ~ FALSE,
@@ -124,7 +152,7 @@ birth_rec2b <- birth_train %>%
     # change logical data type to character
     across(c(first_tri_precare, plural_del, any_precare, first_birth, first_preg), as.character)
   ) %>% 
-  step_rm(precare, illb_r, ilp_r) %>% 
+  step_rm(precare) %>% 
   step_string2factor(first_tri_precare, plural_del, any_precare, first_birth, first_preg) %>% 
   step_unknown(all_nominal_predictors()) %>% 
   step_dummy(all_nominal_predictors(), one_hot = TRUE) %>% 
@@ -137,6 +165,18 @@ birth_rec2b <- birth_train %>%
   step_interact(
     # interaction between weight gain and pre-pregnancy weight
     ~ p_wgt_r:wtgain
+  ) %>%
+  step_interact(
+    # interaction between plural delivery and weight gain
+    ~ starts_with("plural_del"):wtgain
+  ) %>%
+  step_interact(
+    # interaction between cigarettes and weight gain
+    ~ cig_0:wtgain
+  ) %>%
+  step_interact(
+    # interaction between risks and number of prenatal visits
+    ~ starts_with("no_risks"):previs
   )
 
 birth_rec2b %>% 
