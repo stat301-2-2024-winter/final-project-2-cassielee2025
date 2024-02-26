@@ -19,7 +19,7 @@ load(here("recipes/birth_rec1a.rda"))
 
 # parallel processing ----
 num_cores <- parallel::detectCores(logical = TRUE)
-registerDoMC(cores = num_cores - 2)
+registerDoMC(cores = num_cores / 2)
 
 # model specifications ----
 en_spec <- 
@@ -50,7 +50,7 @@ en_param <- extract_parameter_set_dials(en_spec) %>%
 
 # build tuning grid
 set.seed(918345)
-en_grid <- grid_random(en_param, size = 100)
+en_grid <- grid_random(en_param, size = 500)
 
 # fit workflows/models ----
 # set seed

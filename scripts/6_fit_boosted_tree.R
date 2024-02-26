@@ -53,7 +53,7 @@ bt_param <- extract_parameter_set_dials(bt_spec) %>%
 
 # build tuning grid
 set.seed(1234234)
-bt_grid <- grid_random(bt_param, size = 50)
+bt_grid <- grid_random(bt_param, size = 100)
 
 # fit workflows/models ----
 # set seed
