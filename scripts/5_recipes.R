@@ -166,11 +166,18 @@ birth_rec2b <- birth_train %>%
       precare > 3 ~ FALSE
     ),
     
+    # is the mother a teenager or over 35
+    age_risk = case_when(
+      mager <= 18 ~ TRUE, 
+      mager >= 35 ~ TRUE,
+      mager > 18 & mager < 35 ~ FALSE
+    ),
+    
     # change logical data type to character
-    across(c(first_tri_precare, plural_del, any_precare, first_birth, first_preg), as.character)
+    across(c(first_tri_precare, plural_del, any_precare, first_birth, first_preg, age_risk), as.character)
   ) %>% 
   step_rm(precare) %>% 
-  step_string2factor(first_tri_precare, plural_del, any_precare, first_birth, first_preg) %>% 
+  step_string2factor(first_tri_precare, plural_del, any_precare, first_birth, first_preg, age_risk) %>% 
   step_unknown(all_nominal_predictors()) %>% 
   step_dummy(all_nominal_predictors(), one_hot = TRUE) %>% 
   step_zv(all_predictors()) %>% 
