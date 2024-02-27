@@ -3,6 +3,7 @@ This folder contains .rda files for fitted models and metrics
 
 # Files
 - `bt_tuned.rda`: tuned boosted tree (`scripts/6_fit_boosted_tree.R`)
+- `bt_tuned2.rda`: tuned boosted tree using lightbgm engine (`scripts/8_bt_lightbgm.R`)
 - `en_tuned.rda`: tuned elastic net (`scripts/6_fit_elastic.R`)
 - `lm_fit.rda`: fit linear regression (`scripts/6_fit_lm.R`)
 - `null_fit.rda`: null fit (`scripts/6_fit_null.R`)
