@@ -44,8 +44,8 @@ hardhat::extract_parameter_set_dials(en_spec)
 # change hyperparameter ranges
 en_param <- extract_parameter_set_dials(en_spec) %>% 
   update(
-    penalty = penalty(c(-10,0)),
-    mixture = mixture(c(0,1))
+    penalty = penalty(c(-10, 0)),
+    mixture = mixture(c(0, 1))
   )
 
 # build tuning grid
