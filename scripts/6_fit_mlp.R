@@ -39,7 +39,7 @@ nnet_param <- extract_parameter_set_dials(nnet_spec)
 
 # build tuning grid
 set.seed(231324)
-nnet_grid <- grid_random(nnet_param, size = 200)
+nnet_grid <- grid_latin_hypercube(nnet_param, size = 100)
 
 # define workflows ----
 nnet_wflow <-
