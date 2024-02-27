@@ -50,7 +50,7 @@ rf_param <- extract_parameter_set_dials(rf_spec) %>%
 
 # build tuning grid
 set.seed(84935)
-rf_grid <- grid_random(rf_param, size = 400)
+rf_grid <- grid_random(rf_param, size = 50)
 
 # fit workflows/models ----
 # set seed
