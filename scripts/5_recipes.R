@@ -136,7 +136,7 @@ birth_rec2a %>%
 # recipe for tree based models
 birth_rec2b <- birth_train %>% 
   recipe(dbwt ~ .) %>% 
-  step_YeoJohnson(cig_0, p_wgt_r, wtgain) %>% 
+  step_sqrt(cig_0, p_wgt_r, wtgain) %>% 
   step_mutate(
     
     # change NA in interval (numeric) variables to 0 if plural delivery
