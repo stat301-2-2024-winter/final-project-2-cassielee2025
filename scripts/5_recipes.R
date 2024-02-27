@@ -12,6 +12,23 @@ tidymodels_prefer()
 load(here("data/data_split/birth_train.rda"))
 
 ################################################################################
+# null model recipe
+################################################################################
+birth_rec_null <- birth_train %>% 
+  recipe(dbwt ~ .) %>% 
+  step_mutate(across(c(plural_del, any_precare, first_birth, first_preg), as.character)) %>% 
+  step_string2factor(plural_del, any_precare, first_birth, first_preg) %>% 
+  step_dummy(all_nominal_predictors())
+
+birth_rec_null %>% 
+  prep() %>% 
+  bake(new_data = NULL) %>% 
+  slice(1:5)
+
+# save recipe
+save(birth_rec_null, file = here("recipes/birth_rec_null.rda"))
+
+################################################################################
 # basic recipes using variables as is (leaving illb_r and ilp_r with 888 for first birth/pregnancy) ----
 ################################################################################
 # recipe for linear, elastic net, and neural network models
@@ -157,27 +174,7 @@ birth_rec2b <- birth_train %>%
   step_unknown(all_nominal_predictors()) %>% 
   step_dummy(all_nominal_predictors(), one_hot = TRUE) %>% 
   step_zv(all_predictors()) %>% 
-  step_lincomb(all_predictors()) %>% 
-  step_interact(
-    # interaction between starting prenatal care early and number of prenatal visits
-    ~ starts_with("first_tri_precare"):previs,
-  ) %>% 
-  step_interact(
-    # interaction between weight gain and pre-pregnancy weight
-    ~ p_wgt_r:wtgain
-  ) %>%
-  step_interact(
-    # interaction between plural delivery and weight gain
-    ~ starts_with("plural_del"):wtgain
-  ) %>%
-  step_interact(
-    # interaction between cigarettes and weight gain
-    ~ cig_0:wtgain
-  ) %>%
-  step_interact(
-    # interaction between risks and number of prenatal visits
-    ~ starts_with("no_risks"):previs
-  )
+  step_lincomb(all_predictors())
 
 birth_rec2b %>% 
   prep() %>% 
