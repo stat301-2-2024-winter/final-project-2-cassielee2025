@@ -42,6 +42,7 @@ set.seed(231324)
 nnet_grid <- grid_latin_hypercube(nnet_param, size = 100)
 
 # define workflows ----
+set.seed(789897)
 nnet_wflow <-
   workflow() %>% 
   add_model(nnet_spec) %>% 

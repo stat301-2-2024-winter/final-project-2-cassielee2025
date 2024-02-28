@@ -113,11 +113,17 @@ birth_rec2a <- birth_train %>%
       mager > 18 & mager < 35 ~ FALSE
     ),
     
+    # did the mother smoke beforehand?
+    smoker = case_when(
+      cig_0 > 0 ~ TRUE,
+      cig_0 == 0 ~ FALSE
+    ),
+    
     # change logical data type to character
-    across(c(first_tri_precare, plural_del, any_precare, first_birth, first_preg, age_risk), as.character)
+    across(c(first_tri_precare, plural_del, any_precare, first_birth, first_preg, age_risk, smoker), as.character)
   ) %>% 
   step_rm(precare) %>% 
-  step_string2factor(first_tri_precare, plural_del, any_precare, first_birth, first_preg, age_risk) %>% 
+  step_string2factor(first_tri_precare, plural_del, any_precare, first_birth, first_preg, age_risk, smoker) %>% 
   step_unknown(all_nominal_predictors()) %>% 
   step_dummy(all_nominal_predictors()) %>% 
   step_zv(all_predictors()) %>% 
@@ -173,11 +179,17 @@ birth_rec2b <- birth_train %>%
       mager > 18 & mager < 35 ~ FALSE
     ),
     
+    # did the mother smoke beforehand?
+    smoker = case_when(
+      cig_0 > 0 ~ TRUE,
+      cig_0 == 0 ~ FALSE
+    ),
+    
     # change logical data type to character
-    across(c(first_tri_precare, plural_del, any_precare, first_birth, first_preg, age_risk), as.character)
+    across(c(first_tri_precare, plural_del, any_precare, first_birth, first_preg, age_risk, smoker), as.character)
   ) %>% 
   step_rm(precare) %>% 
-  step_string2factor(first_tri_precare, plural_del, any_precare, first_birth, first_preg, age_risk) %>% 
+  step_string2factor(first_tri_precare, plural_del, any_precare, first_birth, first_preg, age_risk, smoker) %>% 
   step_unknown(all_nominal_predictors()) %>% 
   step_dummy(all_nominal_predictors(), one_hot = TRUE) %>% 
   step_zv(all_predictors()) %>% 

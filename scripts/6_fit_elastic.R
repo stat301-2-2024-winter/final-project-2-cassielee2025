@@ -41,12 +41,8 @@ en_wflow <-
 # check ranges for hyperparameters
 hardhat::extract_parameter_set_dials(en_spec)
 
-# change hyperparameter ranges
-en_param <- extract_parameter_set_dials(en_spec) %>% 
-  update(
-    penalty = penalty(c(-10, 0)),
-    mixture = mixture(c(0, 1))
-  )
+# set hyperparameter ranges
+en_param <- extract_parameter_set_dials(en_spec) 
 
 # build tuning grid
 set.seed(918345)
