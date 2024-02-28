@@ -42,11 +42,12 @@ tidymodels_prefer()
 
 ### Data Splitting
 
-The 15,000 observations used for this prediction problem was split using a 75/25 split between training and testing data, stratified by birth weight. 
+The 15,000 observations used for this prediction problem was split using a 75/25 split between training and testing data, stratified by birth weight. The dimensions of the data split are shown in @tbl-data-split.
 
 ```{r}
-#| label: data-split
+#| label: tbl-data-split
 #| echo: false
+#| tbl-cap: "Dimensions of data split"
 
 load(here("memos/memo2_outputs/split_dimensions.rda"))
 split_dimensions %>% 
@@ -76,11 +77,12 @@ The metric I will use to identify the best model is RMSE. I am using RMSE over M
 
 ## Null Model and Standard Linear Regression
 
-I have fit a null model and a standard linear regression using the basic recipe. The metrics of these models are shown below:
+I have fit a null model and a standard linear regression using the basic recipe. The metrics of these models are shown in @tbl-null-linear-models:
 
 ```{r}
-#| label: null-linear-models
+#| label: tbl-null-linear-models
 #| echo: false
+#| tbl-cap: "RMSE of null and linear model using basic recipe"
 
 load(here("results/null_fit.rda"))
 load(here("results/lm_fit.rda"))
@@ -91,7 +93,7 @@ bind_rows(
   .id = "model"
 ) %>% 
   filter(.metric == "rmse") %>% 
-  select(model, .metric, mean, n, std_err) %>% 
+  select(model, mean, n, std_err) %>% 
   kable()
 ```
 
