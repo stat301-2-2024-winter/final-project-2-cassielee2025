@@ -5,7 +5,7 @@ library(tidyverse)
 library(tidymodels)
 library(here)
 library(doMC)
-library(bonsai)
+library(xgboost)
 
 # prefer tidymodels
 tidymodels_prefer()
@@ -28,11 +28,11 @@ bt_spec <-
     learn_rate = tune(),
     trees = tune()
   ) %>%
-  set_engine("lightgbm") %>%
+  set_engine("xgboost") %>%
   set_mode("regression")
 
 # define workflows ----
-bt_wflow3 <-
+bt_wflow4 <-
   workflow() %>%
   add_model(bt_spec) %>% 
   add_recipe(birth_rec1b)
@@ -43,34 +43,36 @@ bt_wflow3 <-
 hardhat::extract_parameter_set_dials(bt_spec)
 
 # change hyperparameter ranges
-bt_param3 <- extract_parameter_set_dials(bt_spec) %>% 
+bt_param4 <- extract_parameter_set_dials(bt_spec) %>% 
   update(
-    mtry = mtry(c(1, 30)),
-    trees = trees(c(1, 3000))
+    mtry = mtry(c(10, 15)),
+    trees = trees(c(2000, 3000)),
+    min_n = min_n(c(20,30)),
+    learn_rate = learn_rate(c(-2, -3))
   )
 
 # build tuning grid
-set.seed(984375)
-bt_grid3 <- grid_latin_hypercube(bt_param3, size = 50)
+set.seed(6836)
+bt_grid4 <- grid_random(bt_param4, size = 100)
 
 # fit workflows/models ----
 # set seed
-set.seed(98435)
-bt_tuned3 <- bt_wflow3 %>% 
+set.seed(32732)
+bt_tuned4 <- bt_wflow4 %>% 
   tune_grid(
     birth_fold, 
-    grid = bt_grid3, 
+    grid = bt_grid4, 
     control = control_resamples(save_workflow = TRUE)
   )
 
 
 # get metrics
-bt3_metrics <- bt_tuned3 %>% 
+bt4_metrics <- bt_tuned4 %>% 
   collect_metrics() %>% 
   filter(.metric == "rmse") %>% 
   slice_min(mean)
 
 # write out results (fitted/trained workflows) ----
-save(bt_tuned3, file = here("results/bt_tuned3.rda"))
-save(bt3_metrics, file = here("results/bt3_metrics.rda"))
+save(bt_tuned4, file = here("results/bt_tuned4.rda"))
+save(bt4_metrics, file = here("results/bt4_metrics.rda"))
 
