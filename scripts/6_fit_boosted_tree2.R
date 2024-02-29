@@ -32,7 +32,7 @@ bt_spec <-
   set_mode("regression")
 
 # define workflows ----
-bt_wflow3 <-
+bt_wflow2 <-
   workflow() %>%
   add_model(bt_spec) %>% 
   add_recipe(birth_rec2b)
@@ -43,7 +43,7 @@ bt_wflow3 <-
 hardhat::extract_parameter_set_dials(bt_spec)
 
 # change hyperparameter ranges
-bt_param3 <- extract_parameter_set_dials(bt_spec) %>% 
+bt_param2 <- extract_parameter_set_dials(bt_spec) %>% 
   update(
     mtry = mtry(c(1, 30)),
     min_n = min_n(c(2, 50)),
@@ -52,18 +52,18 @@ bt_param3 <- extract_parameter_set_dials(bt_spec) %>%
   )
 
 # build tuning grid
-set.seed(1234234)
-bt_grid3 <- grid_latin_hypercube(bt_param3, size = 50)
+set.seed(93745)
+bt_grid2 <- grid_latin_hypercube(bt_param2, size = 50)
 
 # fit workflows/models ----
 # set seed
-set.seed(840983)
-bt_tuned3 <- bt_wflow3 %>% 
+set.seed(89433)
+bt_tuned2 <- bt_wflow2 %>% 
   tune_grid(
     birth_fold, 
-    grid = bt_grid3, 
+    grid = bt_grid2, 
     control = control_resamples(save_workflow = TRUE)
   )
 
 # write out results (fitted/trained workflows) ----
-save(bt_tuned3, file = here("results/bt_tuned3.rda"))
+save(bt_tuned2, file = here("results/bt_tuned2.rda"))
