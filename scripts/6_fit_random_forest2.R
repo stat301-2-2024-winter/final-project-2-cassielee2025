@@ -43,7 +43,7 @@ hardhat::extract_parameter_set_dials(rf_spec)
 # change hyperparameter ranges
 rf_param2 <- extract_parameter_set_dials(rf_spec) %>% 
   update(
-    mtry = mtry(c(1, 30)),
+    mtry = mtry(c(1, 9)),
     min_n = min_n(c(2, 50)),
     trees = trees(c(1, 3000))
   )

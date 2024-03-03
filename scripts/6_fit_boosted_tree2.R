@@ -45,7 +45,7 @@ hardhat::extract_parameter_set_dials(bt_spec)
 # change hyperparameter ranges
 bt_param2 <- extract_parameter_set_dials(bt_spec) %>% 
   update(
-    mtry = mtry(c(1, 30)),
+    mtry = mtry(c(1, 9)),
     min_n = min_n(c(2, 50)),
     learn_rate = learn_rate(range = c(-5, -0.2)),
     trees = trees(c(1, 3000))
