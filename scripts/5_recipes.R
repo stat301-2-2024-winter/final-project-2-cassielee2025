@@ -89,15 +89,25 @@ save(birth_rec1a, file = here("recipes/birth_rec1a.rda"))
 save(birth_rec1b, file = here("recipes/birth_rec1b.rda"))
 
 ################################################################################
-# recipe adding prenatal in first trimester care as a binary variable, interaction terms ----
+# recipe with only more interesting predictors from EDA ----
 ################################################################################
 # recipe for linear, elastic net, and neural network models
 birth_rec2a <- birth_train %>% 
-  recipe(dbwt ~ .) %>% 
+  recipe(
+    dbwt ~ 
+      plural_del + 
+      cig_0 + 
+      m_ht_in + 
+      p_wgt_r + 
+      previs + 
+      wtgain + 
+      first_birth + 
+      first_preg + 
+      any_precare +
+      precare +
+      mager 
+  ) %>% 
   step_mutate(
-    
-    # change NA in interval (numeric) variables to 0 if plural delivery
-    across(c(illb_r, ilp_r), \(x) if_else(is.na(x), 0, x)),
     
     # was there prenatal care beginning in the first trimester?
     first_tri_precare = case_when(
@@ -145,10 +155,6 @@ birth_rec2a <- birth_train %>%
     # interaction between cigarettes and weight gain
     ~ cig_0:wtgain
   ) %>%
-  step_interact(
-    # interaction between risks and number of prenatal visits
-    ~ starts_with("no_risks"):previs
-  ) %>%
   step_scale(all_numeric_predictors()) %>% 
   step_center(all_numeric_predictors())
 
@@ -158,12 +164,21 @@ birth_rec2a %>%
 
 # recipe for tree based models
 birth_rec2b <- birth_train %>% 
-  recipe(dbwt ~ .) %>% 
-  step_sqrt(cig_0, p_wgt_r, wtgain) %>% 
+  recipe(
+    dbwt ~ 
+      plural_del + 
+      cig_0 + 
+      m_ht_in + 
+      p_wgt_r + 
+      previs + 
+      wtgain + 
+      first_birth + 
+      first_preg + 
+      any_precare +
+      precare +
+      mager 
+  ) %>% 
   step_mutate(
-    
-    # change NA in interval (numeric) variables to 0 if plural delivery
-    across(c(illb_r, ilp_r), \(x) if_else(is.na(x), 0, x)),
     
     # was there prenatal care beginning in the first trimester?
     first_tri_precare = case_when(
