@@ -48,7 +48,7 @@ bt_param4 <- extract_parameter_set_dials(bt_spec) %>%
     mtry = mtry(c(10, 15)),
     trees = trees(c(2000, 3000)),
     min_n = min_n(c(20,30)),
-    learn_rate = learn_rate(c(-2, -3))
+    learn_rate = learn_rate(c(-2, -2.8))
   )
 
 # build tuning grid
