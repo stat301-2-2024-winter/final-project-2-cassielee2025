@@ -1,4 +1,4 @@
-# fit boosted tree
+# fit boosted tree using rec 2
 
 # load packages
 library(tidyverse)

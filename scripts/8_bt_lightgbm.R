@@ -1,4 +1,4 @@
-# fit boosted tree
+# fit boosted tree using lightgbm
 
 # load packages
 library(tidyverse)

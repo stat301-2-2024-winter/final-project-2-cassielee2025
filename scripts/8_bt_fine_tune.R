@@ -1,4 +1,4 @@
-# fit boosted tree
+# fine tuning boosted tree using rec1b
 
 # load packages
 library(tidyverse)
