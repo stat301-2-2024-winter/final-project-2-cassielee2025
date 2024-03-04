@@ -60,7 +60,7 @@ The prediction interval competition identified 39 predictors to use, however, du
 
 # Data Overview
 
-The *US births (2018)* has over 3 million variables. Due to computational limitations, I subsetted 30,000 observations, using 15,000 for an exploratory data analysis and 15,000 for model fitting and testing.
+The *US births (2018)* dataset has over 3 million variables. Due to computational limitations, I subsetted 30,000 observations, using 15,000 for an exploratory data analysis and 15,000 for model fitting and testing.
 
 Because I had the ability to subset from over 3 million observations, I was able to filter out incomplete observations before randomly sampling a total of 30,000 observations. Therefore, I do not have any major missingness issues. @tbl-missingness shows the results of the missingness analysis. This analysis contains observations used in exploratory data analysis, model fitting and tuning, and tesing. Variables are ordered from the greatest to least missing observations, with only the first five variables shown.
 
