@@ -39,10 +39,35 @@ tidymodels_prefer()
 :::
 
 # Introduction
+
+The developmental origins of health and disease (DOHaD) is a framework that seeks to link exposures to stressors during windows of susceptibility to the development of non-communicable diseases later in life [@lacagnina2019]. Birth weight has historically been used as an indicator of adverse early life exposures to stressors due to the relative ease of collecting birth weight data [@hanson2015]. Low birth weight is a risk factor for developing non-communicable diseases later in life such as cardiovascular diseases, metabolic diseases, and kidney diseases [@bianchi2022].
+
+## Objective
+
+The objective of this prediction problem is to create a model to predict the birth weight of an infant given a certain set of characteristics. This is a regression problem. Having a prediction model for this problem can be useful in providing insights to eventually developing an inferential question that identifies the most important factors associated with birth weight.
+
+A classification problem to predict whether or not an infant would be born with low birth weight was not feasible with the dataset used because of high class imbalance. Only about 10% of observations in the dataset would have been classified as low birth weight, which is births under 2,500 grams [@hughes2017].
+
+## Data Source
+
+I downloaded the Kaggle dataset, *US births (2018)* [@amoldeshmukh2020]. The creator of this dataset subsetted this data from the raw 2018 natality file available from the Vital Statistics Online Data Portal [@nationalcenterforhealthstatistics2023].
+
+I chose this specific dataset because I searched Kaggle for a dataset relating to birth weight and found the Kaggle competition, *Prediction interval competition I: Birth weight*[^1] by Carl McBride Ellis. Ellis cited the *US births (2018)* dataset as its source. I downloaded the *US births (2018)* dataset to have access to the the full dataset and have more control over the amount of observations I used for exploratory data analysis, the training data, and the testing data.
+
+[^1]: [Kaggle competition](https://www.kaggle.com/competitions/prediction-interval-competition-i-birth-weight/discussion/459133)
+
+The prediction interval competition identified 39 predictors to use, however, due to computational limitations, I selected 20 variables from this list. This selection was done by selecting only variables related to the conditions related to pregnancy — for example, weight gain during pregnancy — and dropping conditions related to birth — for example, the type of facility the birth occured in.
+
 # Data Overview
+
 # Methods
+
 # Model Building and Selection
+
 # Final Model Analysis
+
 # Conclusion
+
 # References
+
 # Appendix: Exploratory Data Analysis

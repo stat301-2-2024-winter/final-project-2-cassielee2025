@@ -21,7 +21,27 @@ ul.task-list li input[type="checkbox"] {
 width: 0.8em;
 margin: 0 0.8em 0.2em -1em;  vertical-align: middle;
 }
-</style>
+
+div.csl-bib-body { }
+div.csl-entry {
+clear: both;
+margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+margin-left:2em;
+text-indent:-2em;
+}
+div.csl-left-margin {
+min-width:2em;
+float:left;
+}
+div.csl-right-inline {
+margin-left:2em;
+padding-left:1em;
+}
+div.csl-indent {
+margin-left: 2em;
+}</style>
 
 
 <script>/*!
@@ -3033,7 +3053,11 @@ vertical-align: -.125em;
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
+  <li><a href="#objective" id="toc-objective" class="nav-link" data-scroll-target="#objective">Objective</a></li>
+  <li><a href="#data-source" id="toc-data-source" class="nav-link" data-scroll-target="#data-source">Data Source</a></li>
+  </ul></li>
   <li><a href="#data-overview" id="toc-data-overview" class="nav-link" data-scroll-target="#data-overview">Data Overview</a></li>
   <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a></li>
   <li><a href="#model-building-and-selection" id="toc-model-building-and-selection" class="nav-link" data-scroll-target="#model-building-and-selection">Model Building and Selection</a></li>
@@ -3044,7 +3068,7 @@ vertical-align: -.125em;
   </ul>
 </nav>
 </div>
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -3092,8 +3116,32 @@ Github Repo Link
 <p><a href="https://github.com/stat301-2-2024-winter/final-project-2-cassielee2025.git">Cassie Lee’s Final Project Memo</a></p>
 </div>
 </div>
-<section id="introduction" class="level1">
+<section id="introduction" class="level1 page-columns page-full">
 <h1>Introduction</h1>
+<p>The developmental origins of health and disease (DOHaD) is a framework that seeks to link exposures to stressors during windows of susceptibility to the development of non-communicable diseases later in life <span class="citation" data-cites="lacagnina2019">(<a href="#ref-lacagnina2019" role="doc-biblioref">Lacagnina 2019</a>)</span>. Birth weight has historically been used as an indicator of adverse early life exposures to stressors due to the relative ease of collecting birth weight data <span class="citation" data-cites="hanson2015">(<a href="#ref-hanson2015" role="doc-biblioref">Hanson 2015</a>)</span>. Low birth weight is a risk factor for developing non-communicable diseases later in life such as cardiovascular diseases, metabolic diseases, and kidney diseases <span class="citation" data-cites="bianchi2022">(<a href="#ref-bianchi2022" role="doc-biblioref">Bianchi and Restrepo 2022</a>)</span>.</p>
+<div class="no-row-height column-margin column-container"><div id="ref-lacagnina2019" class="csl-entry" role="listitem">
+Lacagnina, Salvatore. 2019. <span>“The Developmental Origins of Health and Disease (DOHaD).”</span> <em>American Journal of Lifestyle Medicine</em> 14 (1): 47–50. <a href="https://doi.org/10.1177/1559827619879694">https://doi.org/10.1177/1559827619879694</a>.
+</div><div id="ref-hanson2015" class="csl-entry" role="listitem">
+Hanson, M. 2015. <span>“The Birth and Future Health of DOHaD.”</span> <em>Journal of Developmental Origins of Health and Disease</em> 6 (5): 434–37. <a href="https://doi.org/10.1017/S2040174415001129">https://doi.org/10.1017/S2040174415001129</a>.
+</div><div id="ref-bianchi2022" class="csl-entry" role="listitem">
+Bianchi, Maria Eugenia, and Jaime M. Restrepo. 2022. <span>“Low Birthweight as a Risk Factor for Non-Communicable Diseases in Adults.”</span> <em>Frontiers in Medicine</em> 8. https://doi.org/<a href="https://doi.org/10.3389/fmed.2021.793990">https://doi.org/10.3389/fmed.2021.793990</a>.
+</div></div><section id="objective" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="objective">Objective</h2>
+<p>The objective of this prediction problem is to create a model to predict the birth weight of an infant given a certain set of characteristics. This is a regression problem. Having a prediction model for this problem can be useful in providing insights to eventually developing an inferential question that identifies the most important factors associated with birth weight.</p>
+<p>A classification problem to predict whether or not an infant would be born with low birth weight was not feasible with the dataset used because of high class imbalance. Only about 10% of observations in the dataset would have been classified as low birth weight, which is births under 2,500 grams <span class="citation" data-cites="hughes2017">(<a href="#ref-hughes2017" role="doc-biblioref">Hughes, Black, and Katz 2017</a>)</span>.</p>
+<div class="no-row-height column-margin column-container"><div id="ref-hughes2017" class="csl-entry" role="listitem">
+Hughes, Michelle M., Robert E. Black, and Joanne Katz. 2017. <span>“2500-g Low Birth Weight Cutoff: History and Implications for Future Research and Policy.”</span> <em>Maternal and Child Health Journal</em> 21 (2): 283–89. <a href="https://doi.org/10.1007/s10995-016-2131-9">https://doi.org/10.1007/s10995-016-2131-9</a>.
+</div></div></section>
+<section id="data-source" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="data-source">Data Source</h2>
+<p>I downloaded the Kaggle dataset, <em>US births (2018)</em> <span class="citation" data-cites="amoldeshmukh2020">(<a href="#ref-amoldeshmukh2020" role="doc-biblioref">Amol Deshmukh 2020</a>)</span>. The creator of this dataset subsetted this data from the raw 2018 natality file available from the Vital Statistics Online Data Portal <span class="citation" data-cites="nationalcenterforhealthstatistics2023">(<a href="#ref-nationalcenterforhealthstatistics2023" role="doc-biblioref">National Center for Health Statistics 2023</a>)</span>.</p>
+<div class="no-row-height column-margin column-container"><div id="ref-amoldeshmukh2020" class="csl-entry" role="listitem">
+Amol Deshmukh. 2020. <span>“US Births (2018).”</span> <a href="https://www.kaggle.com/datasets/des137/us-births-2018">https://www.kaggle.com/datasets/des137/us-births-2018</a>.
+</div><div id="ref-nationalcenterforhealthstatistics2023" class="csl-entry" role="listitem">
+National Center for Health Statistics. 2023. <span>“Vital Statistics Online Data Portal.”</span> <a href="https://www.cdc.gov/nchs/data_access/vitalstatsonline.htm">https://www.cdc.gov/nchs/data_access/vitalstatsonline.htm</a>.
+</div><li id="fn1"><p><sup>1</sup> <a href="https://www.kaggle.com/competitions/prediction-interval-competition-i-birth-weight/discussion/459133">Kaggle competition</a></p></li></div><p>I chose this specific dataset because I searched Kaggle for a dataset relating to birth weight and found the Kaggle competition, <em>Prediction interval competition I: Birth weight</em><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> by Carl McBride Ellis. Ellis cited the <em>US births (2018)</em> dataset as its source. I downloaded the <em>US births (2018)</em> dataset to have access to the the full dataset and have more control over the amount of observations I used for exploratory data analysis, the training data, and the testing data.</p>
+<p>The prediction interval competition identified 39 predictors to use, however, due to computational limitations, I selected 20 variables from this list. This selection was done by selecting only variables related to the conditions related to pregnancy — for example, weight gain during pregnancy — and dropping conditions related to birth — for example, the type of facility the birth occured in.</p>
+</section>
 </section>
 <section id="data-overview" class="level1">
 <h1>Data Overview</h1>
@@ -3113,9 +3161,11 @@ Github Repo Link
 <section id="references" class="level1">
 <h1>References</h1>
 </section>
-<section id="appendix-exploratory-data-analysis" class="level1">
-<h1>Appendix: Exploratory Data Analysis</h1>
+<section id="appendix-exploratory-data-analysis" class="level1 unnumbered">
+<h1 class="unnumbered">Appendix: Exploratory Data Analysis</h1>
+
 </section>
+
 
 </main>
 <!-- /main column -->
