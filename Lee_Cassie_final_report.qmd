@@ -1,0 +1,48 @@
+---
+title: "Birth Weight Prediction"
+subtitle: |
+  | Final Project 
+  | Data Science 2 with R (STAT 301-2)
+author: "Cassie Lee"
+date: today
+
+format:
+  html:
+    toc: true
+    embed-resources: true
+    
+execute:
+  echo: false
+  warning: false
+
+from: markdown+emoji 
+reference-location: margin
+citation-location: margin
+bibliography: references.bib
+---
+
+```{r}
+#| label: load-packages-data
+
+library(tidyverse)
+library(tidymodels)
+library(here)
+library(knitr)
+
+tidymodels_prefer()
+```
+
+::: {.callout-tip icon="false"}
+## Github Repo Link
+
+[Cassie Lee's Final Project Memo](https://github.com/stat301-2-2024-winter/final-project-2-cassielee2025.git)
+:::
+
+# Introduction
+# Data Overview
+# Methods
+# Model Building and Selection
+# Final Model Analysis
+# Conclusion
+# References
+# Appendix: Exploratory Data Analysis
