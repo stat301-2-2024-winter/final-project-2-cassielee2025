@@ -17,7 +17,7 @@ birth_model_data <- birth_data %>%
 
 # target variable analysis 
 
-p1 <- birth_eda %>% 
+p1 <- birth_data %>% 
   ggplot(aes(dbwt)) +
   geom_density() +
   theme_minimal() +
@@ -28,7 +28,7 @@ p1 <- birth_eda %>%
   ) +
   labs(x = "Birth weight (grams)")
 
-p2 <- birth_eda %>% 
+p2 <- birth_data %>% 
   ggplot(aes(dbwt)) +
   geom_boxplot() +
   theme_void() 
@@ -36,7 +36,7 @@ p2 <- birth_eda %>%
 plot <- p2/p1 +
   plot_layout(heights = unit(c(1,5), c("cm", "null")))
 
-save(plot, file = here("memos/memo1_outputs/target_variable.rda"))
+ggsave(plot, path = here("memos/memo1_outputs/"), filename = "target_variable.png")
 
 # save data splits
 save(birth_eda, file = here("data/data_split/birth_eda.rda"))

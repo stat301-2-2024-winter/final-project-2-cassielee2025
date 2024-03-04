@@ -60,6 +60,29 @@ The prediction interval competition identified 39 predictors to use, however, du
 
 # Data Overview
 
+The *US births (2018)* has over 3 million variables. Due to computational limitations, I subsetted 30,000 observations, using 15,000 for an exploratory data analysis and 15,000 for model fitting and testing.
+
+Because I had the ability to subset from over 3 million observations, I was able to filter out incomplete observations before randomly sampling a total of 30,000 observations. Therefore, I do not have any major missingness issues. @tbl-missingness shows the results of the missingness analysis. This analysis contains observations used in exploratory data analysis, model fitting and tuning, and tesing. Variables are ordered from the greatest to least missing observations, with only the first five variables shown.
+
+Although there are not major missingness issues, @tbl-missingness shows that interval since last pregnancy (`ilp_r`), interval since last birth (`illb_r`), and which month of pregnancy the mother began prenatal care (`precare`) have several missing values. I created missingness in these variables because the original data collection encoded multiple types of information under the same variable. 
+
+For the interval since last pregnancy and last birth, if the mother had a plural delivery, the interval since the last birth was encoded as the number of infants  (0 to 3) the mother had at the time of birth. From this information, I created a logical variable to identify whether or not the birth was a plural delivery and recoded the interval since last birth and last pregnancy as missing. Similarly, if this was the mother's first birth or first pregnancy, the interval since last birth and last pregnancy was encoded as 888. From this information, I created two logical variables to identify whether or not this was the mother's first birth or first pregnancy and recoded the interval since last birth and last pregnancy as missing. For which month of pregnancy the mother began prenatal care, 00 was recorded if the mother did not receive any prenatal care. From this information, I created a logical variable to identify whether or not the mother received prenatal care and recoded the month of pregnancy the mother began prenatal care as missing. I could not filter out these observations due to the information they contained, even as "missing" variables. All other variables are complete.
+
+```{r}
+#| label: tbl-missingness
+#| echo: false
+#| tbl-cap: "Missingness analysis conducted on 30,000 randomly sampled observations."
+
+load(here("memos/memo1_outputs/data_quality_check.rda"))
+data_quality_check %>% 
+  kable()
+```
+
+
+
+
+![Target variable analysis conducted on 30,000 randomly sampled observations.](memos/memo1_outputs/target_variable.png){#fig-target-variable}
+
 # Methods
 
 # Model Building and Selection
