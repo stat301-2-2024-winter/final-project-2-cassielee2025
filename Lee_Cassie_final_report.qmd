@@ -60,7 +60,7 @@ The prediction interval competition identified 39 predictors to use, however, du
 
 # Data Overview
 
-The *US births (2018)* dataset has over 3 million variables. Due to computational limitations, I subsetted 30,000 observations, using 15,000 for an exploratory data analysis and 15,000 for model fitting and testing.
+The *US births (2018)* dataset has over 3 million observations. Due to computational limitations, I subsetted 30,000 observations, using 15,000 for an exploratory data analysis and 15,000 for model fitting and testing.
 
 Because I had the ability to subset from over 3 million observations, I was able to filter out incomplete observations before randomly sampling a total of 30,000 observations. Therefore, I do not have any major missingness issues. @tbl-missingness shows the results of the missingness analysis. This analysis contains observations used in exploratory data analysis, model fitting and tuning, and tesing. Variables are ordered from the greatest to least missing observations, with only the first five variables shown.
 
@@ -80,9 +80,11 @@ data_quality_check %>%
 
 A univariate analysis of birthweight across the 30,000 randomly sampled observations shows a fairly normal distribution, so no transformation will be needed to use birthweight in this prediction problem. @fig-target-variable shows the distribution of birthweights, highlighting the outliers for babies that were both unusually light and unusually heavy. This distribution is as expected with physiological constraints on both very small and very large infants.
 
-![Target variable analysis conducted on 30,000 randomly sampled observations.](memos/memo1_outputs/target_variable.png){#fig-target-variable}
+![Target variable analysis conducted on 30,000 randomly sampled observations.](memos/memo1_outputs/target_variable.png){#fig-target-variable width=5in}
 
-For exploratory data analysis, I conducted bivariate analyses between each of the predictor and birthweight. Only a few of the predictors showed significant relationships with birthweight. 
+I performed a short exploratory data analysis using the 15,000 observations set aside for this purpose. This analysis was used to inform both the base recipe and feature engineering in a second unique recipe.
+
+I conducted bivariate analyses between each of the predictor and birthweight. Only a few of the predictors showed interesting relationships with birthweight. @fig-plural_del, @fig-cig_0, @fig-m_ht_in, @fig-p_wgt_r, @fig-previs, and @fig-wtgain show the relationships between birthweight and the predictors that have more interesting relationships. Figures for the other relationships can be found in the appendix.
 
 ::: {layout-ncol=2}
 
@@ -99,6 +101,10 @@ For exploratory data analysis, I conducted bivariate analyses between each of th
 ![Weight gain during pregnancy](memos/memo2_outputs/eda_outputs/numeric_wtgain.png){#fig-wtgain}
 
 :::
+
+I also explored correlation between numeric predictors to identify co-linearity, shown in @fig-corr-plot. There are a few predictors that are highly correlated with each other, such as the age of the mother and the age of the father, as well as the number of prior births who are still alive and the interval since the last birth and last pregnancy. I do not address these co-linearities in the basic recipe because they are not perfectly co-linear. However, in the second recipe, I do not include the the age of the father or the number of prior births who are still alive, so these co-linearities are not an issue. 
+
+![Correlation matrix between numeric predictors](memos/memo2_outputs/eda_outputs/corrplot.png){#fig-corr-plot width=5in}
 
 # Methods
 

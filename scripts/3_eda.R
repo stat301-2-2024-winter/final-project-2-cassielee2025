@@ -84,10 +84,15 @@ for(i in numeric_vars){
 }
 
 # make a correlation matrix ----
+
+png(filename = here("memos/memo2_outputs/eda_outputs/corrplot.png"), unit = "in", width = 5, height = 4, res = 300)
+
 birth_eda %>% 
   na.omit() %>% 
   select(where(is.numeric)) %>% 
   cor() %>% 
   corrplot()
 
-ggsave(last_plot(), filename = "corrplot.png", path = here("data/data_split/"))
+dev.off()
+
+
