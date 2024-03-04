@@ -85,6 +85,9 @@ for(i in numeric_vars){
 
 # make a correlation matrix ----
 birth_eda %>% 
+  na.omit() %>% 
   select(where(is.numeric)) %>% 
   cor() %>% 
   corrplot()
+
+ggsave(last_plot(), filename = "corrplot.png", path = here("data/data_split/"))

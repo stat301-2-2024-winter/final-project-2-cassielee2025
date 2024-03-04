@@ -56,7 +56,7 @@ I chose this specific dataset because I searched Kaggle for a dataset relating t
 
 [^1]: [Kaggle competition](https://www.kaggle.com/competitions/prediction-interval-competition-i-birth-weight/discussion/459133)
 
-The prediction interval competition identified 39 predictors to use, however, due to computational limitations, I selected 20 variables from this list. This selection was done by selecting only variables related to the conditions related to pregnancy — for example, weight gain during pregnancy — and dropping conditions related to birth — for example, the type of facility the birth occured in.
+The prediction interval competition identified 39 predictors to use, however, due to computational limitations, I selected 20 variables from this list. This selection was done by selecting only variables related to the conditions related to pregnancy — for example, weight gain during pregnancy — and dropping conditions related to birth — for example, the type of facility the birth occurred in.
 
 # Data Overview
 
@@ -78,9 +78,27 @@ data_quality_check %>%
   kable()
 ```
 
-A univariate analysis of birthweight across the 30,000 randomly sampled observations shows a fairly normal distribution, so no transformation will be needed to use birthweight in this prediction problem. @fig-target-variable shows the distribution of birthweights, highlighting the outliers for babies that were both unusually light and unusually heavy. This distribution is as expected with physiological constraints on both very small and very large infants.   
+A univariate analysis of birthweight across the 30,000 randomly sampled observations shows a fairly normal distribution, so no transformation will be needed to use birthweight in this prediction problem. @fig-target-variable shows the distribution of birthweights, highlighting the outliers for babies that were both unusually light and unusually heavy. This distribution is as expected with physiological constraints on both very small and very large infants.
 
 ![Target variable analysis conducted on 30,000 randomly sampled observations.](memos/memo1_outputs/target_variable.png){#fig-target-variable}
+
+For exploratory data analysis, I conducted bivariate analyses between each of the predictor and birthweight. Only a few of the predictors showed significant relationships with birthweight. 
+
+::: {layout-ncol=2}
+
+![Plural delivery](memos/memo2_outputs/eda_outputs/factor_plural_del.png){#fig-plural_del}
+
+![Daily cigarettes before pregancy](memos/memo2_outputs/eda_outputs/numeric_cig_0.png){#fig-cig_0}
+
+![Mother's height](memos/memo2_outputs/eda_outputs/numeric_m_ht_in.png){#fig-m_ht_in}
+
+![Mother's weight before pregnancy](memos/memo2_outputs/eda_outputs/numeric_p_wgt_r.png){#fig-p_wgt_r}
+
+![Number of prenatal visits](memos/memo2_outputs/eda_outputs/numeric_previs.png){#fig-previs}
+
+![Weight gain during pregnancy](memos/memo2_outputs/eda_outputs/numeric_wtgain.png){#fig-wtgain}
+
+:::
 
 # Methods
 
