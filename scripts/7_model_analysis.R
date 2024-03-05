@@ -16,7 +16,6 @@ load(here("results/rf_tuned.rda"))
 
 load(here("results/bt_tuned2.rda"))
 load(here("results/en_tuned2.rda"))
-load(here("results/lm_fit2.rda"))
 load(here("results/knn_tuned2.rda"))
 load(here("results/nnet_tuned2.rda"))
 load(here("results/rf_tuned2.rda"))
@@ -29,10 +28,6 @@ null_lm_metrics <- bind_rows(
     filter(.metric == "rmse"),
   
   "lm" = lm_fit %>% 
-    collect_metrics() %>% 
-    filter(.metric == "rmse"),
-  
-  "lm2" = lm_fit2 %>% 
     collect_metrics() %>% 
     filter(.metric == "rmse"),
   
