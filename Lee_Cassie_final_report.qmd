@@ -116,25 +116,31 @@ I used vfold cross validaton because I have a fairly large dataset and do not ne
 
 I created two distinct recipes, one base recipe and one recipe where I focused on only the predictors that were identified in the exploratory data analysis as having an interesting relationship with birthweight.
 
-### Base Recipe
+### Null Recipe
 
-The base recipe is a kitchen sink recipe that keeps the variables as is. The variables interval since last pregnancy and interval since last birth have NA values for those with plural deliveries. I changed these NA values to 0. For individuals who did not receive any prenatal care, I changed NA values to 10, essentially indicating negative amounts of prenatal care because imputing these NA values did not make sense. I removed variables that had exact linear correlations between them and variables that did not have any variance. For the recipe for linear models, I dummy coded all nominal predictors and scaled and centered all numeric predictors. For tree based models, I used one-hot encoding to dummy the variables.
+A null recipe was defined using all predictor variables and dummy coding all nominal predictors.
 
-### Second Recipe
+### Basic Recipe
 
-For the second recipe, I selected only the variables that had interesting relationships with birthweight apparent in the exploratory data analysis and variables that have been shown to be predictive of birthweight in the literature. These variables were whether or not the birth was a plural delivery, the number of cigarettes smoked daily before pregnancy, the mother's height, the mother's weight before pregnancy, the number of prenatal visits, the mother's weight gain during pregnancy, whether the birth was the mother's first birth or first pregnancy, whether the mother received any prenatal care, and the mother's age. Within the recipe, I also operationalized prenatal care as receiving prenatal care beginning in the first trimester or not and created a new variable to identify if mothers are in a higher risk age group (teenage or over 35) [@dasilva2003; @restrepo-méndez2015]. For linear based models, interaction terms were used between starting prenatal care early and number of prenatal visits, between weight gain and pre-pregnancy weight, between plural delivery and weight gain, between cigarettes and weight gain, and between interaction between risks and number of prenatal visits. Similar to the base recipe, I removed variables wit exact linear correlations, predictors lacking any variance, and made appropriate adjustments to the recipe between recipes for linear and tree based models.
+The base recipe is a basic recipe that keeps the variables as is. The variables interval since last pregnancy and interval since last birth have NA values for those with plural deliveries. I changed these NA values to 0. For individuals who did not receive any prenatal care, I changed NA values to 10, essentially indicating negative amounts of prenatal care because imputing these NA values did not make sense. I removed variables that had exact linear correlations between them and variables that did not have any variance. For the recipe for parametric models, I dummy coded all nominal predictors and scaled and centered all numeric predictors. For nonparametric models, I used one-hot encoding to dummy the variables.
+
+### Reduced Recipe
+
+For the second recipe, I selected only the variables that had interesting relationships with birthweight apparent in the exploratory data analysis and variables that have been shown to be predictive of birthweight in the literature. These variables were whether or not the birth was a plural delivery, the number of cigarettes smoked daily before pregnancy, the mother's height, the mother's weight before pregnancy, the number of prenatal visits, the mother's weight gain during pregnancy, whether the birth was the mother's first birth or first pregnancy, whether the mother received any prenatal care, and the mother's age. Within the recipe, I also operationalized prenatal care as receiving prenatal care beginning in the first trimester or not and created a new variable to identify if mothers are in a higher risk age group (teenage or over 35) [@dasilva2003; @restrepo-méndez2015]. For parametric models, interaction terms were used between starting prenatal care early and number of prenatal visits, between weight gain and pre-pregnancy weight, between plural delivery and weight gain, between cigarettes and weight gain, and between interaction between risks and number of prenatal visits. Similar to the base recipe, I removed variables wit exact linear correlations, predictors lacking any variance, and made appropriate adjustments to the recipe between recipes for parametric and nonparametric models.
 
 ## Model Types and Tuning Parameters
 
-Null
+**Null**: A null model was defined as a baseline, un-informative model using the null recipe and the parsnip engine. For a regression problem like predicting birthweight, it simply predicts the average of the outcome variable. The RMSE of this model was calculated in order to compare with other models to see if creating more complex models.
 
-Simple Linear Regression
+**Ordinary Linear Regression**: A simple linear regression model was fit using the null recipe and the lm engine.
 
-Elastic Net
+**Elastic Net**: Penalized regression models were tuned using using the parametric versions of the basic and the reduced recipes and the glmnet engine. The hyperparameters I tuned were penalty and mixture. When the penalty increases, predictors are penalized when they do not contribute much to the target variable by pushing their coefficients towards zero. When mixture is 1, the model is a lasso regression, and whenn mixture is 0, the model is a ridge regression. I tuned penalty between -10 and 0 on a log10 scale and mixture between 0 and 1. These are the default tuning ranges for these hyperparameters, but they had to be set manually due to an error in the default settings used in the function. 
 
-Nearest Neighbor
+also explain tuning grid
 
-Random Forest
+**K Nearest Neighbor**: K-nearest neighbor models were tuned using the parametric versions of the basic and reduced recipes and the kknn engine. The hyperparameters I tuned were the number of neighbors, the number of nearest neighbors to use to predict birthweight. I tuned nearest neighbors between 1 and 50 neighbors. 
+
+**Random Forest**: Random forest models were tuned using the nonparametric versions of the basic and reduced recipes and the ranger engine. The hyperparameters I tuned were the number of sampled predictors, the number of trees, and the number of data points to split. I tuned the number of sampled predictors between 1 and 30 
 
 Boosted Tree
 
@@ -143,7 +149,6 @@ Neural Net
 ## Selection Metric
 
 The metric I used to identify the best model is root mean square error (RMSE). I used RMSE over mean average error partly because it is one of the default metrics used in regression prediction problems, but also because I would like to weigh larger errors more heavily in the performance estimate. This is because babies with a really low or really high birth weight can lead to birth complications. Thus, highly inaccurate predictions would fail to identify risks of low or high birth weight, which can have significant health impacts.
-
 
 # Model Building and Selection
 
