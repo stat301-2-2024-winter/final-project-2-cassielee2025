@@ -64,9 +64,9 @@ The *US births (2018)* dataset has over 3 million observations. Due to computati
 
 Because I had the ability to subset from over 3 million observations, I was able to filter out incomplete observations before randomly sampling a total of 30,000 observations. Therefore, I do not have any major missingness issues. @tbl-missingness shows the results of the missingness analysis. This analysis contains observations used in exploratory data analysis, model fitting and tuning, and tesing. Variables are ordered from the greatest to least missing observations, with only the first five variables shown.
 
-Although there are not major missingness issues, @tbl-missingness shows that interval since last pregnancy (`ilp_r`), interval since last birth (`illb_r`), and which month of pregnancy the mother began prenatal care (`precare`) have several missing values. I created missingness in these variables because the original data collection encoded multiple types of information under the same variable. 
+Although there are not major missingness issues, @tbl-missingness shows that interval since last pregnancy (`ilp_r`), interval since last birth (`illb_r`), and which month of pregnancy the mother began prenatal care (`precare`) have several missing values. I created missingness in these variables because the original data collection encoded multiple types of information under the same variable.
 
-For the interval since last pregnancy and last birth, if the mother had a plural delivery, the interval since the last birth was encoded as the number of infants  (0 to 3) the mother had at the time of birth. From this information, I created a logical variable to identify whether or not the birth was a plural delivery and recoded the interval since last birth and last pregnancy as missing. Similarly, if this was the mother's first birth or first pregnancy, the interval since last birth and last pregnancy was encoded as 888. From this information, I created two logical variables to identify whether or not this was the mother's first birth or first pregnancy and recoded the interval since last birth and last pregnancy as missing. For which month of pregnancy the mother began prenatal care, 00 was recorded if the mother did not receive any prenatal care. From this information, I created a logical variable to identify whether or not the mother received prenatal care and recoded the month of pregnancy the mother began prenatal care as missing. I could not filter out these observations due to the information they contained, even as "missing" variables. All other variables are complete.
+For the interval since last pregnancy and last birth, if the mother had a plural delivery, the interval since the last birth was encoded as the number of infants (0 to 3) the mother had at the time of birth. From this information, I created a logical variable to identify whether or not the birth was a plural delivery and recoded the interval since last birth and last pregnancy as missing. Similarly, if this was the mother's first birth or first pregnancy, the interval since last birth and last pregnancy was encoded as 888. From this information, I created two logical variables to identify whether or not this was the mother's first birth or first pregnancy and recoded the interval since last birth and last pregnancy as missing. For which month of pregnancy the mother began prenatal care, 00 was recorded if the mother did not receive any prenatal care. From this information, I created a logical variable to identify whether or not the mother received prenatal care and recoded the month of pregnancy the mother began prenatal care as missing. I could not filter out these observations due to the information they contained, even as "missing" variables. All other variables are complete.
 
 ```{r}
 #| label: tbl-missingness
@@ -80,14 +80,13 @@ data_quality_check %>%
 
 A univariate analysis of birthweight across the 30,000 randomly sampled observations shows a fairly normal distribution, so no transformation will be needed to use birthweight in this prediction problem. @fig-target-variable shows the distribution of birthweights, highlighting the outliers for babies that were both unusually light and unusually heavy. This distribution is as expected with physiological constraints on both very small and very large infants.
 
-![Target variable analysis conducted on 30,000 randomly sampled observations.](memos/memo1_outputs/target_variable.png){#fig-target-variable width=5in}
+![Target variable analysis conducted on 30,000 randomly sampled observations.](memos/memo1_outputs/target_variable.png){#fig-target-variable width="5in"}
 
 I performed a short exploratory data analysis using the 15,000 observations set aside for this purpose. This analysis was used to inform both the base recipe and feature engineering in a second unique recipe.
 
 I conducted bivariate analyses between each of the predictor and birthweight. Only a few of the predictors showed interesting relationships with birthweight. @fig-plural_del, @fig-cig_0, @fig-m_ht_in, @fig-p_wgt_r, @fig-previs, and @fig-wtgain show the relationships between birthweight and the predictors that have more interesting relationships. Figures for the other relationships can be found in the appendix.
 
-::: {layout-ncol=2}
-
+::: {layout-ncol="2"}
 ![Plural delivery](memos/memo2_outputs/eda_outputs/factor_plural_del.png){#fig-plural_del}
 
 ![Daily cigarettes before pregancy](memos/memo2_outputs/eda_outputs/numeric_cig_0.png){#fig-cig_0}
@@ -99,31 +98,49 @@ I conducted bivariate analyses between each of the predictor and birthweight. On
 ![Number of prenatal visits](memos/memo2_outputs/eda_outputs/numeric_previs.png){#fig-previs}
 
 ![Weight gain during pregnancy](memos/memo2_outputs/eda_outputs/numeric_wtgain.png){#fig-wtgain}
-
 :::
 
-I also explored correlation between numeric predictors to identify co-linearity, shown in @fig-corr-plot. There are a few predictors that are highly correlated with each other, such as the age of the mother and the age of the father, as well as the number of prior births who are still alive and the interval since the last birth and last pregnancy. I do not address these co-linearities in the basic recipe because they are not perfectly co-linear. However, in the second recipe, I do not include the the age of the father or the number of prior births who are still alive, so these co-linearities are not an issue. 
+I also explored correlation between numeric predictors to identify co-linearity, shown in @fig-corr-plot. There are a few predictors that are highly correlated with each other, such as the age of the mother and the age of the father, as well as the number of prior births who are still alive and the interval since the last birth and last pregnancy. I do not address these co-linearities in the basic recipe because they are not perfectly co-linear. However, in the second recipe, I do not include the the age of the father or the number of prior births who are still alive, so these co-linearities are not an issue.
 
-![Correlation matrix between numeric predictors](memos/memo2_outputs/eda_outputs/corrplot.png){#fig-corr-plot width=5in}
+![Correlation matrix between numeric predictors](memos/memo2_outputs/eda_outputs/corrplot.png){#fig-corr-plot width="5in"}
 
 # Methods
 
 ## Data Splitting
 
-The 15,000 observations used for this prediction problem was split using a 75/25 split between training and testing data, stratified by birth weight. 
+The 15,000 observations used for this prediction problem was split using a 75/25 split between training and testing data, stratified by birth weight.
 
 I used vfold cross vailidation because I have a fairly large dataset and do not need to use sampling with replacement as used in bootstrapping. The training data was then resampled using vfold cross validation with 4 folds and 3 repeats, so each workflow was fit 12 times for a metric estimate and standard error. In each iteration of the workflow, about 11,250 observations was used to train and 3,750 observations was used to obtain an estimate for the performance of the model. I used few folds and repeats because I was running into an issue with computation time and computer battery usage.
 
 ## Recipes
 
+I created two distinct recipes, one base recipe and one recipe where I focused on only the predictors that were identified in the exploratory data analysis as having an interesting relationship with birthweight.
+
 ### Base Recipe
+
+The base recipe is a kitchen sink recipe that keeps the variables as is. The variables interval since last pregnancy and interval since last birth have NA values for those with plural deliveries. I changed these NA values to 0. For individuals who did not receive any prenatal care, I changed NA values to 10, essentially indicating negative amounts of prenatal care because imputing these NA values did not make sense. I removed variables that had exact linear correlations between them and variables that did not have any variance. For the recipe for linear models, I dummy coded all nominal predictors and scaled and centered all numeric predictors. For tree based models, I used one-hot encoding to dummy the variables.
 
 ### Second Recipe
 
+For the second recipe, I selected only the variables that had interesting relationships with birthweight apparent in the exploratory data analysis and variables that have been shown to be predictive of birthweight in the literature. These variables were whether or not the birth was a plural delivery, the number of cigarettes smoked daily before pregnancy, the mother's height, the mother's weight before pregnancy, the number of prenatal visits, the mother's weight gain during pregnancy, whether the birth was the mother's first birth or first pregnancy, whether the mother received any prenatal care, and the mother's age. Within the recipe, I also operationalized prenatal care as receiving prenatal care beginning in the first trimester or not and created a new variable to identify if mothers are in a higher risk age group (teenage or over 35) [@dasilva2003; @restrepo-méndez2015]. For linear based models, interaction terms were used between starting prenatal care early and number of prenatal visits, between weight gain and pre-pregnancy weight, between plural delivery and weight gain, between cigarettes and weight gain, and between interaction between risks and number of prenatal visits. Similar to the base recipe, I removed variables wit exact linear correlations, predictors lacking any variance, and made appropriate adjustments to the recipe between recipes for linear and tree based models.
+
 ## Model Types and Tuning Parameters
 
-## Selection Metric
+Null
 
+Simple Linear Regression
+
+Elastic Net
+
+Nearest Neighbor
+
+Random Forest
+
+Boosted Tree
+
+Neural Net
+
+## Selection Metric
 
 # Model Building and Selection
 
