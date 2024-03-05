@@ -108,6 +108,23 @@ I also explored correlation between numeric predictors to identify co-linearity,
 
 # Methods
 
+## Data Splitting
+
+The 15,000 observations used for this prediction problem was split using a 75/25 split between training and testing data, stratified by birth weight. 
+
+I used vfold cross vailidation because I have a fairly large dataset and do not need to use sampling with replacement as used in bootstrapping. The training data was then resampled using vfold cross validation with 4 folds and 3 repeats, so each workflow was fit 12 times for a metric estimate and standard error. In each iteration of the workflow, about 11,250 observations was used to train and 3,750 observations was used to obtain an estimate for the performance of the model. I used few folds and repeats because I was running into an issue with computation time and computer battery usage.
+
+## Recipes
+
+### Base Recipe
+
+### Second Recipe
+
+## Model Types and Tuning Parameters
+
+## Selection Metric
+
+
 # Model Building and Selection
 
 # Final Model Analysis

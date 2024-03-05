@@ -9,6 +9,7 @@ library(here)
 load(here("results/bt_tuned.rda"))
 load(here("results/en_tuned.rda"))
 load(here("results/lm_fit.rda"))
+load(here("results/knn_tuned.rda"))
 load(here("results/nnet_tuned.rda"))
 load(here("results/null_fit.rda"))
 load(here("results/rf_tuned.rda"))
@@ -16,6 +17,7 @@ load(here("results/rf_tuned.rda"))
 load(here("results/bt_tuned2.rda"))
 load(here("results/en_tuned2.rda"))
 load(here("results/lm_fit2.rda"))
+load(here("results/knn_tuned2.rda"))
 load(here("results/nnet_tuned2.rda"))
 load(here("results/rf_tuned2.rda"))
 
@@ -44,6 +46,8 @@ all_fits <- as_workflow_set(
   bt2 = bt_tuned2,
   en = en_tuned,
   en2 = en_tuned2,
+  knn = knn_tuned,
+  knn2 = knn_tuned2,
   nnet = nnet_tuned,
   nnet2 = nnet_tuned2,
   rf = rf_tuned,
@@ -82,6 +86,16 @@ en_tuned2 %>%
 
 ggsave(plot = last_plot(), filename = "en_tuned2_autoplot.png", path = here("results/"))
 
+knn_tuned %>% 
+  autoplot(metric = "rmse")
+
+ggsave(plot = last_plot(), filename = "knn_tuned_autoplot.png", path = here("results/"))
+
+knn_tuned2 %>% 
+  autoplot(metric = "rmse")
+
+ggsave(plot = last_plot(), filename = "knn_tuned2_autoplot.png", path = here("results/"))
+
 nnet_tuned %>% 
   autoplot(metric = "rmse")
 
@@ -106,7 +120,7 @@ ggsave(plot = last_plot(), filename = "rf_tuned2_autoplot.png", path = here("res
 
 all_metrics %>% 
   arrange(mean) %>% 
-  mutate(rank = 1:8) %>% 
+  mutate(rank = 1:10) %>% 
   ggplot(aes(rank, mean)) +
   geom_point(aes(color = wflow_id)) +
   geom_errorbar(aes(color = wflow_id, ymin = mean - std_err, ymax = mean + std_err), width = 0.1) +
