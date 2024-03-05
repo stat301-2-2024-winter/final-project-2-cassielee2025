@@ -39,10 +39,11 @@ knn_wflow2 <-
 hardhat::extract_parameter_set_dials(knn_model)
 
 # change hyperparameter ranges
-knn_param2 <- extract_parameter_set_dials(knn_model)
+knn_param2 <- extract_parameter_set_dials(knn_model) %>% 
+  update(neighbors = neighbors(c(1, 50)))
 
 # build tuning grid
-knn_grid2 <- grid_regular(knn_param2, levels = 5)
+knn_grid2 <- grid_regular(knn_param2, levels = 25)
 
 # fit workflows/models ----
 # set seed
