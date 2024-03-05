@@ -142,7 +142,7 @@ Neural Net
 
 ## Selection Metric
 
-The metric I used to identify the best model is RMSE. I used RMSE over MAE partly because it is one of the default metrics used in regression prediction problems, but also because I would like to weigh larger errors more heavily in the performance estimate. This is because babies with a really low or really high birth weight can lead to birth complications. Thus, highly inaccurate predictions would fail to identify risks of low or high birth weight, which can have significant health impacts.
+The metric I used to identify the best model is root mean square error (RMSE). I used RMSE over mean average error partly because it is one of the default metrics used in regression prediction problems, but also because I would like to weigh larger errors more heavily in the performance estimate. This is because babies with a really low or really high birth weight can lead to birth complications. Thus, highly inaccurate predictions would fail to identify risks of low or high birth weight, which can have significant health impacts.
 
 
 # Model Building and Selection
