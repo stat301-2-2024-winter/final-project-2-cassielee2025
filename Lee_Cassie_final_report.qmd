@@ -130,27 +130,71 @@ For the second recipe, I selected only the variables that had interesting relati
 
 ## Model Types and Tuning Parameters
 
+For all models that required tuning, I used latin hypercube sampling to get a near random sample across the tuning parameters. This allowed me to nearly randomly sample across the tuning space, but ensures I have better overall coverage of the tuning space.  
+
 **Null**: A null model was defined as a baseline, un-informative model using the null recipe and the parsnip engine. For a regression problem like predicting birthweight, it simply predicts the average of the outcome variable. The RMSE of this model was calculated in order to compare with other models to see if creating more complex models.
 
 **Ordinary Linear Regression**: A simple linear regression model was fit using the null recipe and the lm engine.
 
-**Elastic Net**: Penalized regression models were tuned using using the parametric versions of the basic and the reduced recipes and the glmnet engine. The hyperparameters I tuned were penalty and mixture. When the penalty increases, predictors are penalized when they do not contribute much to the target variable by pushing their coefficients towards zero. When mixture is 1, the model is a lasso regression, and whenn mixture is 0, the model is a ridge regression. I tuned penalty between -10 and 0 on a log10 scale and mixture between 0 and 1. These are the default tuning ranges for these hyperparameters, but they had to be set manually due to an error in the default settings used in the function. 
+**Elastic Net (en and en2)**: Penalized regression models were tuned using using the parametric versions of the basic and the reduced recipes and the glmnet engine. The hyperparameters I tuned were penalty and mixture. When the penalty increases, predictors are penalized when they do not contribute much to the target variable by pushing their coefficients towards zero. When mixture is 1, the model is a lasso regression, and when mixture is 0, the model is a ridge regression. I tuned penalty between -10 and 0 on a log10 scale and mixture between 0 and 1. These are the default tuning ranges for these hyperparameters, but they had to be set manually due to an error in the default settings used in the function. 
 
-also explain tuning grid
+Since elastic net models fit fairly quickly, I fit 500 unique workflows for each recipe. 
 
-**K Nearest Neighbor**: K-nearest neighbor models were tuned using the parametric versions of the basic and reduced recipes and the kknn engine. The hyperparameters I tuned were the number of neighbors, the number of nearest neighbors to use to predict birthweight. I tuned nearest neighbors between 1 and 50 neighbors. 
+**K Nearest Neighbor (knn and knn2)**: K-nearest neighbor models were tuned using the parametric versions of the basic and reduced recipes and the kknn engine. The hyperparameters I tuned were the number of neighbors, the number of nearest neighbors to use to predict birthweight. I tuned nearest neighbors between 1 and 500 neighbors. 
 
-**Random Forest**: Random forest models were tuned using the nonparametric versions of the basic and reduced recipes and the ranger engine. The hyperparameters I tuned were the number of sampled predictors, the number of trees, and the number of data points to split. I tuned the number of sampled predictors between 1 and 30 
+For this model type only, I used a regularized grid with 250 levels.
 
-Boosted Tree
+**Random Forest (rf and rf2)**: Random forest models were tuned using the nonparametric versions of the basic and reduced recipes and the ranger engine. The hyperparameters I tuned were the number of sampled predictors, the number of trees, and the number of data points to split. For the basic recipe, I tuned the number of sampled predictors between 1 and 30, and for the reduced recipe, I tuned the number of sampled predictors between 1 and 9. This represents about 80% and about 60% of the total predictors. For both recipes, I tuned the number of trees between 2 and 50, and number of data points to split between 1 and 3000.
 
-Neural Net
+Since tree based models take longer to fit, I fit 50 unique workflows for each recipe. 
+
+**Boosted Tree (bt and bt2)**: Boosted tree models were tuned using the nonparametric versions of the basic and reduced recipes and the xgboost engine. The hyperparameters I tuned were the same as for random forest with an addition of tuning the learning rate. I tuned learn rate between -5 and -0.2 on a log10 scale because it seemed like a reasonable range given previous examples in class. 
+
+Since tree based models take longer to fit, I fit 50 unique workflows for each recipe. 
+
+**Neural Network (nnet and nnet2)**: Single layer neural network models were tuned using the parametric versions of the basic and reduced recipes and the nnet engine. Although neural network models are nonparametric, the preprocessing required aligned with that of parametric models. The hyperparameters I tuned were the number of units in the hidden model, the amount of weight decay, and the number of training iterations. Since I am not too familiar with the specifics of these tuning parameters, I did not update these tuning ranges.
+
+Since the nerual network model seemed to fit faster than tree based models, but slower than linear models, I fit 100 unique workflows for each recipe. 
 
 ## Selection Metric
 
 The metric I used to identify the best model is root mean square error (RMSE). I used RMSE over mean average error partly because it is one of the default metrics used in regression prediction problems, but also because I would like to weigh larger errors more heavily in the performance estimate. This is because babies with a really low or really high birth weight can lead to birth complications. Thus, highly inaccurate predictions would fail to identify risks of low or high birth weight, which can have significant health impacts.
 
 # Model Building and Selection
+
+@tbl-null-baseline displays the RMSE of both the null and ordinary linear models. The RMSE of the linear regression model is significantly lower than that of the null model, indicating that creating a model should be more predictive of birthweight than using the average birthweight. Since the ordinary linear regression model is a baseline model, I should aim for a final model with an RMSE lower than 526 grams. 
+
+```{r}
+#| label: tbl-null-baseline
+#| echo: false
+#| tbl-cap: "Model performance of null and ordinary linear models (RMSE)"
+
+load(here("results/null_lm_metrics.rda"))
+null_lm_metrics %>% 
+  select(model, .metric, mean, n, std_err) %>% 
+  kable()
+```
+
+## Best Performing Model Results
+
+@tbl-best-metrics shows the RMSE and standard error across fold and repeats for each model type and model recipe. For the boosted tree, elastic net, and random forest models, the reduced recipe performed significantly worse than the basic recipe. For the k nearest neighbor models, the reduced recipe performed significantly better than the basic recipe. For the neural network models, both recipes performed similarly. 
+
+```{r}
+#| label: tbl-best-metrics
+#| echo: false
+#| tbl-cap: "Comparison of best tuned model performance (RMSE)"
+
+load(here("results/all_metrics.rda"))
+all_metrics %>% 
+  select(wflow_id, .metric, mean, n, std_err) %>% 
+  kable()
+```
+
+@fig-workflow-rank shows the RMSE of each model and recipe combination by workflow rank. Only the random forest and boosted tree models using the first recipe were significantly better than the baseline model. The elastic net model using the first recipe and the boosted tree model using the second recipe were similar to the baseline model. All other models performed worse than the baseline model.
+
+![Workflow rank of best performing models by type and recipe compared to baseline ordinary linear regression model](results/workflow_rank_plot.png){#fig-workflow-rank width="6in"}
+
+## Further Tuning
 
 # Final Model Analysis
 

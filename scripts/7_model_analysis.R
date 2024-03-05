@@ -49,6 +49,27 @@ all_fits <- as_workflow_set(
   rf2 = rf_tuned2
 )
 
+# best tuning parameters
+all_tuning_parameters <- bind_rows(
+  "bt" = bt_tuned %>% select_best(metric = "rmse"),
+  "bt2" = bt_tuned2 %>% select_best(metric = "rmse"),
+  "en" = en_tuned %>% select_best(metric = "rmse"),
+  "en2" = en_tuned2 %>% select_best(metric = "rmse"),
+  "knn" = knn_tuned %>% select_best(metric = "rmse"),
+  "knn2" = knn_tuned2 %>% select_best(metric = "rmse"),
+  "nnet" = nnet_tuned %>% select_best(metric = "rmse"),
+  "nnet2" = nnet_tuned2 %>% select_best(metric = "rmse"),
+  "rf" = rf_tuned %>% select_best(metric = "rmse"),
+  "rf2" = rf_tuned2 %>% select_best(metric = "rmse"),
+  .id = "model"
+) %>% 
+  select(-.config)
+
+# save parameters
+save(all_tuning_parameters, file = here("results/all_tuning_parameters.rda"))
+
+# best metrics
+
 all_metrics <- all_fits %>% 
   collect_metrics() %>% 
   filter(.metric == "rmse") %>% 
@@ -123,7 +144,12 @@ all_metrics %>%
     x = "Workflow Rank",
     y = "RMSE"
   ) +
-  guides(color = guide_legend(title = "Model")) 
+  guides(color = guide_legend(title = "Model")) +
+  geom_hline(yintercept = 526.3188) +
+  geom_hline(yintercept = 524.7359, linetype = "dotted") + 
+  geom_hline(yintercept = 527.9017, linetype = "dotted") +
+  scale_x_continuous(breaks = seq(0, 10, 2)) +
+  annotate("text", label = "Ordinary Linear Regression", x = 8.25, y = 527)
 
 ggsave(plot = last_plot(), filename = "workflow_rank_plot.png", path = here("results/"))
 
