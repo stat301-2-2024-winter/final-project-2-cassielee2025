@@ -154,7 +154,7 @@ Since tree based models take longer to fit, I fit 50 unique workflows for each r
 
 **Neural Network (nnet and nnet2)**: Single layer neural network models were tuned using the parametric versions of the basic and reduced recipes and the nnet engine. Although neural network models are nonparametric, the preprocessing required aligned with that of parametric models. The hyperparameters I tuned were the number of units in the hidden model, the amount of weight decay, and the number of training iterations. Since I am not too familiar with the specifics of these tuning parameters, I did not update these tuning ranges.
 
-Since the nerual network model seemed to fit faster than tree based models, but slower than linear models, I fit 100 unique workflows for each recipe. 
+Since the neural network model seemed to fit faster than tree based models, but slower than linear models, I fit 100 unique workflows for each recipe. 
 
 ## Selection Metric
 
