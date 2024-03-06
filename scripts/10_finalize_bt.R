@@ -13,9 +13,6 @@ tidymodels_prefer()
 # load training data & controls
 load(here("data/data_split/birth_train.rda"))
 
-# load pre-processing/feature engineering/recipe
-load(here("recipes/birth_rec2b.rda"))
-
 # load tuning fit
 load(here("results/bt_tuned4.rda"))
 

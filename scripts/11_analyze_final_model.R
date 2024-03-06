@@ -15,7 +15,7 @@ load(here("data/data_split/birth_test.rda"))
 load(here("results/final_fit.rda"))
 
 # set metrics
-bt_metrics <- metric_set(rmse, rsq, mae, ccc, rpd)
+bt_metrics <- metric_set(rmse, rsq, mae)
 
 # predictions with testing set
 birth_prediction <- birth_test %>% 
@@ -34,10 +34,6 @@ ggplot(birth_prediction, aes(x = dbwt, y = .pred)) +
   coord_obs_pred()
 
 ggsave(plot = last_plot(), filename = "predictions_plot.png", path = here("results/"))
-
-# winkler interval ----
-birth_prediction %>% 
-  winkler(dbwt, .pred)
 
 
 

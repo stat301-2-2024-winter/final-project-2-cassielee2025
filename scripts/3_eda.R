@@ -56,7 +56,7 @@ plot_numeric <- function(var){
   birth_eda %>% 
     ggplot(aes({{  var  }}, dbwt)) +
     geom_point(alpha = 0.1) +
-    geom_smooth(method = "lm", se = FALSE) + 
+    geom_smooth(method = "lm", se = TRUE) + 
     theme_classic()
   
   # create file name

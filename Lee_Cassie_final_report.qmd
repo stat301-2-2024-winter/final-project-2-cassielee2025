@@ -84,7 +84,7 @@ A univariate analysis of birthweight across the 30,000 randomly sampled observat
 
 I performed a short exploratory data analysis using the 15,000 observations set aside for this purpose. This analysis was used to inform both the base recipe and feature engineering in a second unique recipe.
 
-I conducted bivariate analyses between each of the predictor and birthweight. Only a few of the predictors showed interesting relationships with birthweight. @fig-plural_del, @fig-cig_0, @fig-m_ht_in, @fig-p_wgt_r, @fig-previs, and @fig-wtgain show the relationships between birthweight and the predictors that have more interesting relationships. Figures for the other relationships can be found in the appendix.
+I conducted bivariate analyses between each of the predictor and birthweight. Only a few of the predictors showed interesting relationships with birthweight. @fig-plural_del, @fig-cig_0, @fig-m_ht_in, @fig-p_wgt_r, @fig-previs, and @fig-wtgain show the relationships between birthweight and the predictors that have more interesting relationships.
 
 ::: {layout-ncol="2"}
 ![Plural delivery](memos/memo2_outputs/eda_outputs/factor_plural_del.png){#fig-plural_del}
@@ -231,11 +231,25 @@ After tuning the boosted tree model with the lightgbm engine and narrower tuning
 
 ## Final Model Selection
 
+The final model I selected was the boosted tree model with narrowed tuning ranges using the basic recipe and the xgboost engine (bt4 in @fig-bt-workflow-rank). I was surprised that this model won, or rather, that the boosted tree model with the reduced recipe did not win. I expected the reduced recipe to perform better than the basic recipe because the exploratory data analysis did not show particularly interesting relationships between many predictors and birthweight. I initially thought that removing these predictors would remove some of the noise they could be introducing into the model, but it appears that the variables I removed are in fact important in building a better model. 
 
 # Final Model Analysis
+
+I finalized the best boosted tree model and trained it using the full training set and then used this model to create predictions using the testing set. 
+
+```{r}
+#| label: tbl-test-metrics
+#| echo: false
+#| tbl-cap: "Performance metrics of final model on testing data set"
+
+load(here("results/test_metrics.rda"))
+test_metrics %>% 
+  select(-.estimator) %>% 
+  kable()
+```
+
+
 
 # Conclusion
 
 # References
-
-# Appendix: Exploratory Data Analysis
