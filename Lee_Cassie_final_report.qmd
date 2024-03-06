@@ -175,9 +175,26 @@ null_lm_metrics %>%
   kable()
 ```
 
-## Best Performing Model Results
+## Best Performing Workflow Hyperparameters
 
-@tbl-best-metrics shows the RMSE and standard error across fold and repeats for each model type and model recipe. For the boosted tree, elastic net, and random forest models, the reduced recipe performed significantly worse than the basic recipe. For the k nearest neighbor models, the reduced recipe performed significantly better than the basic recipe. For the neural network models, both recipes performed similarly. 
+@tbl-all-tuning-parameters shows the values of the hyperparameters for the best performing workflow for each model type and recipe combination. These hyperparameters reflect the  combination of hyperparameters tested during the latin hypercube search that resulted in the lowest RMSE. The hyperparameters themselves only contain information about the specific workflow used and do not contain information about how the workflow performed compared to other model types. 
+
+```{r}
+#| label: tbl-all-tuning-parameters
+#| echo: false
+#| tbl-cap: "Hyperparameters of the best performing workflow for each model type."
+
+options(knitr.kable.NA = '')
+
+load(here("results/all_tuning_parameters.rda"))
+all_tuning_parameters %>% 
+  kable()
+```
+
+
+## Best Performing Workflow Results
+
+@tbl-best-metrics shows the RMSE and standard error across folds and repeats for each model type and model recipe. For the boosted tree, elastic net, and random forest models, the reduced recipe performed significantly worse than the basic recipe. For the k nearest neighbor models, the reduced recipe performed significantly better than the basic recipe. For the neural network models, both recipes performed similarly. 
 
 ```{r}
 #| label: tbl-best-metrics
@@ -237,6 +254,8 @@ The final model I selected was the boosted tree model with narrowed tuning range
 
 I finalized the best boosted tree model and trained it using the full training set and then used this model to create predictions using the testing set. 
 
+@tbl-test-metrics shows the RMSE, $R^2$, and mean average error of the predictions. The RMSE of the estimate was more than one standard error lower than the average RMSE across the resamples of the best boosted tree model (@fig-bt-workflow-rank). This indicates that my resampling structure had too few repeats (12 repeats total) and likely led to overfitting. Achieving a lower RMSE on the testing set was likely by chance, and the model could just as likely had an RMSE more than one standard error higher than the average RMSE across the resamples. The $R^2$ of the model is very low, showing that the model does not explain much of the variation seen in birthweight. The mean average error is much lower than the RMSE, showing that on average, the predictions are off from the actual birthweight by about 385 grams. 
+
 ```{r}
 #| label: tbl-test-metrics
 #| echo: false
@@ -248,8 +267,13 @@ test_metrics %>%
   kable()
 ```
 
+@fig-predictions clearly demonstrates how the final model was unable to capture the full extent of the variation seen in the actual birthweights. While the actual birthweights range from less than 500 grams to over 5000 grams, the predicted birthweights are limited to just under 2000 grams and around 4000 grams. Despite my choice to use RMSE as my metric to more heavily penalize large deviations during the model competition stage, the final model predictions still showed significant error from the actual birthweights. 
+
+![Predictions vs true birthweight values](results/predictions_plot.png){#fig-predictions width="5in"}
+
+Although this model preformed significantly better than both the null and baseline model, it is not a strong model to predict birthweight. Only about 54% of the predicted observations were within 10% of the actual birthweight. Thus, significant improvements can be made to better predict birthweight given the data available. 
 
 
-# Conclusion
+# Discussion and Conclusion
 
 # References

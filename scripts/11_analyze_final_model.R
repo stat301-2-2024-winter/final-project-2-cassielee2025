@@ -31,9 +31,9 @@ ggplot(birth_prediction, aes(x = dbwt, y = .pred)) +
   geom_abline(lty = 2) + 
   geom_point(alpha = 0.3) + 
   labs(y = "Predicted Birth Weight", x = "Actual Birth Weight") +
-  coord_obs_pred()
+  coord_obs_pred() +
+  geom_smooth(method = "lm", se = FALSE)
 
 ggsave(plot = last_plot(), filename = "predictions_plot.png", path = here("results/"))
-
-
+  
 
