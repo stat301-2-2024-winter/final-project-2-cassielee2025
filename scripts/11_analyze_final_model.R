@@ -35,5 +35,16 @@ ggplot(birth_prediction, aes(x = dbwt, y = .pred)) +
   geom_smooth(method = "lm", se = FALSE)
 
 ggsave(plot = last_plot(), filename = "predictions_plot.png", path = here("results/"))
+
+# percent within 10% of prediction
+birth_prediction %>% 
+  mutate(error = abs(.pred-dbwt)/dbwt) %>% 
+  count(error < 0.1)
+
+# percent of low birth weight babies that were also predicted to be low birthweight
+birth_prediction %>% 
+  filter(dbwt < 2500) %>% 
+  mutate(accurate_lowbwt_prediction = if_else(.pred < 2500, TRUE, FALSE)) %>% 
+  count(accurate_lowbwt_prediction)
   
 
