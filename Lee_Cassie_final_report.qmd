@@ -100,19 +100,19 @@ I conducted bivariate analyses between each of the predictor and birthweight. On
 
 I also explored correlation between numeric predictors to identify co-linearity, shown in @fig-corr-plot. There are a few predictors that are highly correlated with each other, such as the age of the mother and the age of the father, as well as the number of prior births who are still alive and the interval since the last birth and last pregnancy. I do not address these co-linearities in the basic recipe because they are not perfectly co-linear. However, in the reduced recipe, I do not include the the age of the father or the number of prior births who are still alive, so these co-linearities are not an issue.
 
-![Correlation matrix between numeric predictors.](memos/memo2_outputs/eda_outputs/corrplot.png){#fig-corr-plot width="5in"}
+![Correlation matrix between numeric predictors.](memos/memo2_outputs/eda_outputs/corrplot.png){#fig-corr-plot width="4in"}
 
 # Methods
 
 ## Data Splitting
 
-The 15,000 observations used for this prediction problem was split using a 75/25 split between training and testing data, stratified by birth weight.
+The 15,000 observations used for this prediction problem was split using a 75/25 split between training and testing data, stratified by birthweight.
 
 I used vfold cross validaton because I have a fairly large dataset and do not need to use sampling with replacement as used in bootstrapping. I resampled with 4 folds and 3 repeats, so each workflow was fit 12 times for a metric estimate and standard error. In each iteration of the workflow, about 11,250 observations was used to train and 3,750 observations was used to obtain an estimate for the performance of the model. I used few folds and repeats because I was running into an issue with computation time and computer battery usage.
 
 ## Recipes
 
-I created two distinct recipes, one base recipe and one recipe where I focused on only the predictors that were identified in the exploratory data analysis as having an interesting relationship with birthweight.
+I created two distinct recipes in addition to a null recipe. One was a basic recipe and one was a reduced recipe where I focused on only the predictors that were identified in the exploratory data analysis as having an interesting relationship with birthweight.
 
 ### Null Recipe
 
@@ -120,7 +120,7 @@ A null recipe was defined using all predictor variables and dummy coding all nom
 
 ### Basic Recipe
 
-The base recipe is a basic recipe that keeps the variables as is. The variables interval since last pregnancy and interval since last birth have NA values for those with plural deliveries. I changed these NA values to 0. For individuals who did not receive any prenatal care, I changed NA values to 10, essentially indicating negative amounts of prenatal care because imputing these NA values did not make sense. I removed variables that had exact linear correlations between them and variables that did not have any variance. For the recipe for parametric models, I dummy coded all nominal predictors and scaled and centered all numeric predictors. For nonparametric models, I used one-hot encoding to dummy the variables.
+The basic recipe is a kitchen sink recipe. The variables interval since last pregnancy and interval since last birth have NA values for those with plural deliveries. I changed these NA values to 0. For individuals who did not receive any prenatal care, I changed NA values to 10, essentially indicating negative amounts of prenatal care because imputing these NA values did not make sense. I removed variables that had exact linear correlations between them and variables that did not have any variance. For the recipe for parametric models, I dummy coded all nominal predictors and scaled and centered all numeric predictors. For nonparametric models, I used one-hot encoding to dummy the variables.
 
 ### Reduced Recipe
 
@@ -165,7 +165,7 @@ The metric I used to identify the best model is root mean square error (RMSE). I
 ```{r}
 #| label: tbl-null-baseline
 #| echo: false
-#| tbl-cap: "Model performance of null and ordinary linear models (RMSE)"
+#| tbl-cap: "Model performance of null and ordinary linear models (RMSE)."
 
 load(here("results/null_lm_metrics.rda"))
 null_lm_metrics %>% 
@@ -196,7 +196,7 @@ all_tuning_parameters %>%
 ```{r}
 #| label: tbl-best-metrics
 #| echo: false
-#| tbl-cap: "Comparison of best tuned model performance (RMSE)"
+#| tbl-cap: "Comparison of best tuned model performance (RMSE)."
 
 load(here("results/all_metrics.rda"))
 all_metrics %>% 
@@ -206,7 +206,7 @@ all_metrics %>%
 
 @fig-workflow-rank shows the RMSE of each model and recipe combination by workflow rank. Only the random forest and boosted tree models using the first recipe were significantly better than the baseline model. The elastic net model using the first recipe and the boosted tree model using the second recipe were similar to the baseline model. All other models performed worse than the baseline model.
 
-![Workflow rank of best performing models by type and recipe compared to baseline ordinary linear regression model.](results/workflow_rank_plot.png){#fig-workflow-rank width="6in"}
+![Workflow rank of best performing models by type and recipe compared to baseline ordinary linear regression model.](results/workflow_rank_plot.png){#fig-workflow-rank width="5in"}
 
 From this analysis, I identified the boosted tree model using the basic recipe as the best model.
 
@@ -236,17 +236,20 @@ bt_tuned %>%
 
 @fig-bt-tuned-autoplot shows the performance of each hyperparameter across the workflows. Although there is no clear pattern for the number of sampled predictors, the number of tress, and the number of data points to split, there was a clear pattern for the learning rate. From @fig-bt-tuned-autoplot, I narrowed down the learning rate to be between -2 and -2.8 on a log10 scale.
 
-![Hyperparameters of boosted tree workflows using the basic recipe and xgboost engine.](results/bt_tuned_autoplot.png){#fig-bt-tuned-autoplot width="5in"}
+![Hyperparameters of boosted tree workflows using the basic recipe and xgboost engine.](results/bt_tuned_autoplot.png){#fig-bt-tuned-autoplot width="4in"}
 
 ### Comparing Boosted Tree Models
 
 After tuning the boosted tree model with the lightgbm engine and narrower tuning ranges, I compared the boosted tree models using the basic recipe (bt) and reduced recipe (bt2) using the xgboost engine, the boosted tree models using the lightgbm engine (bt3), and the boosted tree model with narrowed tuning ranges (bt4). @fig-bt-workflow-rank shows that changing the engine and tuning within a narrower range did not significantly reduce the RMSE of the best model, but they both still performed better than the best boosted tree model fitted using the reduced recipe. Nevertheless, tuning within a narrower range did marginally reduce the average RMSE across the folds and repeats.
 
-![Workflow rank of best performing boosted tree models (RMSE).](results/workflow_rank_bt_only.png){#fig-bt-workflow-rank width="5in"}
+![Workflow rank of best performing boosted tree models (RMSE).](results/workflow_rank_bt_only.png){#fig-bt-workflow-rank width="4in"}
 
 ## Final Model Selection
 
-The final model I selected was the boosted tree model with narrowed tuning ranges using the basic recipe and the xgboost engine (bt4 in @fig-bt-workflow-rank). I was surprised that this model won, or rather, that the boosted tree model with the reduced recipe did not win. I expected the reduced recipe to perform better than the basic recipe because the exploratory data analysis did not show particularly interesting relationships between many predictors and birthweight. I initially thought that removing these predictors would remove some of the noise they could be introducing into the model, but it appears that the variables I removed are in fact important in building a better model.
+The final model I selected was the boosted tree model with narrowed tuning ranges using the basic recipe and the xgboost engine (bt4 in @fig-bt-workflow-rank). The tuning parameters of this model are 10 for the number of sampled predictors, 2645 for the number of trees, 29 for the number of data points to split, and 0.00315 for the learning rate. 
+
+
+I was surprised that this model won, or rather, that the boosted tree model with the reduced recipe did not win. I expected the reduced recipe to perform better than the basic recipe because the exploratory data analysis did not show particularly interesting relationships between many predictors and birthweight. I initially thought that removing these predictors would remove some of the noise they could be introducing into the model, but it appears that the variables I removed are in fact important in building a better model.
 
 # Final Model Analysis
 
@@ -257,7 +260,7 @@ I finalized the best boosted tree model and trained it using the full training s
 ```{r}
 #| label: tbl-test-metrics
 #| echo: false
-#| tbl-cap: "Performance metrics of final model on testing data set"
+#| tbl-cap: "Performance metrics of final model on testing data set."
 
 load(here("results/test_metrics.rda"))
 test_metrics %>% 
@@ -267,13 +270,13 @@ test_metrics %>%
 
 @fig-predictions clearly demonstrates how the final model was unable to capture the full extent of the variation seen in the actual birthweights. While the actual birthweights range from less than 500 grams to over 5000 grams, the predicted birthweights are limited to just under 2000 grams and around 4000 grams. Despite my choice to use RMSE as my metric to more heavily penalize large deviations during the model competition stage, the final model predictions still showed significant error from the actual birthweights.
 
-![Predictions vs true birthweight values.](results/predictions_plot.png){#fig-predictions width="5in"}
+![Predictions vs true birthweight values.](results/predictions_plot.png){#fig-predictions width="4in"}
 
 Although this model preformed significantly better than both the null and baseline model, it is not a strong model to predict birthweight. Only about 54% of the predicted observations were within 10% of the actual birthweight. Additionally, of 290 low birthweight births in the testing set (\< 2500 grams), the final model only predicted that 43 of the birthweights would be low birthweight. Thus, significant improvements can be made to better predict birthweight given the data available.
 
 # Discussion and Conclusion
 
-This project sought to predict birthweight from a set of 24 predictors. A boosted tree model using a basic recipe performed the best during model competition and was selected to analyze the testing set with. This model performed the best compared to all other models, but it still did not provide a particualrly accurate prediction of birthweight and was unable to predict any outliers in birthweight data.
+This project sought to predict birthweight from a set of 24 predictors. A boosted tree model using a basic recipe performed the best during model competition and was selected to analyze the testing set with. This model performed the best compared to all other models, but it still did not provide a particularly accurate prediction of birthweight and was unable to predict any outliers in birthweight data.
 
 Although the two best performing models were nonparametric tree based models, the ordinary linear regression model did not perform much worse. This suggests that birthweight can be predicted more accurately with nonparametric tree based models, however, further feature engineering, and perhaps simply the inclusion of more predictors would be required to improve the performance of the model. Including more predictors would likely improve the accuracy of the model because I removed seemingly non significant predictors for the reduced recipe, which caused models fitted with that recipe to perform significantly worse than the basic recipe. This indicates that although many of the predictors were not highly correlated with birthweight, the combination of those predictors can significantly improve the accuracy of the model. With more time and computational resources, a next step would be to build a model including all the predictors listed in the Kaggle competition[^2].
 
