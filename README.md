@@ -13,3 +13,4 @@ This prediction project seeks to predict whether or not a person will give birth
 - `Lee_Cassie_executive_summary.qmd`: .qmd file of executive summary
 - `Lee_Cassie_final_report.html`: .html file of executive summary
 - `Lee_Cassie_final_report.qmd`: .qmd file of executive summary
+- `references.bib`: list of refences used in final report and executive summary
