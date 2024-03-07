@@ -40,21 +40,15 @@ The objective of this prediction problem is to create a model to predict the bir
 **Kaggle dataset *US births (2018)* [@amoldeshmukh2020]**:
 
 - Regression problem to predict birthweight
-
 - 30,000 randomly sampled observations — 15,000 for exploratory data analysis, 15,000 for model training and testing
-
 - 24 predictors 
 
 # Methods
 
 - Vfold cross validation resampling with 4 folds and 3 repeats
-
 - Two distinct recipes: basic kitchen sink and reduced recipe (only containing variables of interest found in brief exploratory data analysis and literature review)
-
 - Null and baseline models: null and ordinary linear regression
-
 - Tuning models: elastic net, k nearest neighbor, random forest, boosted tree, neural network
-
 - Selection metric: root mean square error (RMSE)
 
 # Initial Model Building and Selection
@@ -66,19 +60,14 @@ The objective of this prediction problem is to create a model to predict the bir
 **Recipe Comparison**: 
 
 - Boosted tree, elastic net, and random forest models: the reduced recipe performed significantly worse than the basic recipe
-
 - K nearest neighbor models: the reduced recipe performed significantly better than the basic recipe
-
 - Neural network models: both recipes performed similarly
 
 **Model Comparison**:
 
 - Only the random forest and boosted tree models using the first recipe were significantly better than the baseline
-
 - The elastic net model using the first recipe and the boosted tree model using the second recipe were similar to the baseline
-
 - All other models performed worse than the baseline model.
-
 - From this analysis, the boosted tree model using the basic recipe was identified as the best model.
 
 ## Further Tuning — New Boosted Tree Models
@@ -86,7 +75,6 @@ The objective of this prediction problem is to create a model to predict the bir
 **New Models**:
 
 - Explored the lightgbm engine (bt3)
-
 - Searched tuning parameters within a smaller range (bt4)
 
 **Boosted Tree Model Comparison**:
@@ -100,11 +88,8 @@ The final model I selected was the boosted tree model with narrowed tuning range
 **Best Boosted Tree Hyperparameters**:
 
 - Number of sampled predictors: 10
-
 - Number of trees: 2645
-
 - Number of data points to split: 29
-
 - Learn rate: 0.00315 
 
 # Final Model Analysis
@@ -116,15 +101,11 @@ The final model I selected was the boosted tree model with narrowed tuning range
 **Significant deviations from actual birthweight**:
 
 - Actual birthweights range from less than 500 grams to over 5000 grams vs. predicted birthweights  limited to just under 2000 grams and around 4000 grams
-
 - Only about 54% of the predicted observations were within 10% of the actual birthweight
-
 - Of 290 low birthweight births in the testing set (< 2500 grams), the final model only predicted that 43 of the birthweights would be low birthweight
 
 # Conclusions
 
 - Boosted tree perfored the best but is not a strong model to predict birthweight
-
 - Factors affecting birthweight are complex and cannot be reduced to a few seemingly more important variables
-
 - Potential future project as a classification problem to predict low birthweight as a category

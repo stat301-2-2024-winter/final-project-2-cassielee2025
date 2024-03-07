@@ -3117,19 +3117,19 @@ Github Repo Link
 <p>The objective of this prediction problem is to create a model to predict the birthweight of an infant given a certain set of characteristics. Having a prediction model for this problem can be useful in providing insights to eventually developing an inferential question that identifies the most important factors associated with birthweight.</p>
 <p><strong>Kaggle dataset <em>US births (2018)</em> <span class="citation" data-cites="amoldeshmukh2020">(<a href="#ref-amoldeshmukh2020" role="doc-biblioref">Amol Deshmukh 2020</a>)</span></strong>:</p>
 <ul>
-<li><p>Regression problem to predict birthweight</p></li>
-<li><p>30,000 randomly sampled observations — 15,000 for exploratory data analysis, 15,000 for model training and testing</p></li>
-<li><p>24 predictors</p></li>
+<li>Regression problem to predict birthweight</li>
+<li>30,000 randomly sampled observations — 15,000 for exploratory data analysis, 15,000 for model training and testing</li>
+<li>24 predictors</li>
 </ul>
 </section>
 <section id="methods" class="level1">
 <h1>Methods</h1>
 <ul>
-<li><p>Vfold cross validation resampling with 4 folds and 3 repeats</p></li>
-<li><p>Two distinct recipes: basic kitchen sink and reduced recipe (only containing variables of interest found in brief exploratory data analysis and literature review)</p></li>
-<li><p>Null and baseline models: null and ordinary linear regression</p></li>
-<li><p>Tuning models: elastic net, k nearest neighbor, random forest, boosted tree, neural network</p></li>
-<li><p>Selection metric: root mean square error (RMSE)</p></li>
+<li>Vfold cross validation resampling with 4 folds and 3 repeats</li>
+<li>Two distinct recipes: basic kitchen sink and reduced recipe (only containing variables of interest found in brief exploratory data analysis and literature review)</li>
+<li>Null and baseline models: null and ordinary linear regression</li>
+<li>Tuning models: elastic net, k nearest neighbor, random forest, boosted tree, neural network</li>
+<li>Selection metric: root mean square error (RMSE)</li>
 </ul>
 </section>
 <section id="initial-model-building-and-selection" class="level1">
@@ -3147,23 +3147,23 @@ Figure 1: Workflow rank of best performing models by type and recipe compared t
 </div>
 <p><strong>Recipe Comparison</strong>:</p>
 <ul>
-<li><p>Boosted tree, elastic net, and random forest models: the reduced recipe performed significantly worse than the basic recipe</p></li>
-<li><p>K nearest neighbor models: the reduced recipe performed significantly better than the basic recipe</p></li>
-<li><p>Neural network models: both recipes performed similarly</p></li>
+<li>Boosted tree, elastic net, and random forest models: the reduced recipe performed significantly worse than the basic recipe</li>
+<li>K nearest neighbor models: the reduced recipe performed significantly better than the basic recipe</li>
+<li>Neural network models: both recipes performed similarly</li>
 </ul>
 <p><strong>Model Comparison</strong>:</p>
 <ul>
-<li><p>Only the random forest and boosted tree models using the first recipe were significantly better than the baseline</p></li>
-<li><p>The elastic net model using the first recipe and the boosted tree model using the second recipe were similar to the baseline</p></li>
-<li><p>All other models performed worse than the baseline model.</p></li>
-<li><p>From this analysis, the boosted tree model using the basic recipe was identified as the best model.</p></li>
+<li>Only the random forest and boosted tree models using the first recipe were significantly better than the baseline</li>
+<li>The elastic net model using the first recipe and the boosted tree model using the second recipe were similar to the baseline</li>
+<li>All other models performed worse than the baseline model.</li>
+<li>From this analysis, the boosted tree model using the basic recipe was identified as the best model.</li>
 </ul>
 <section id="further-tuning-new-boosted-tree-models" class="level2">
 <h2 class="anchored" data-anchor-id="further-tuning-new-boosted-tree-models">Further Tuning — New Boosted Tree Models</h2>
 <p><strong>New Models</strong>:</p>
 <ul>
-<li><p>Explored the lightgbm engine (bt3)</p></li>
-<li><p>Searched tuning parameters within a smaller range (bt4)</p></li>
+<li>Explored the lightgbm engine (bt3)</li>
+<li>Searched tuning parameters within a smaller range (bt4)</li>
 </ul>
 <p><strong>Boosted Tree Model Comparison</strong>:</p>
 <p><a href="#fig-bt-workflow-rank" class="quarto-xref">Figure 2</a> compares the boosted tree models using the basic recipe (bt) and reduced recipe (bt2) using the xgboost engine, the boosted tree models using the lightgbm engine (bt3), and the boosted tree model with narrowed tuning ranges (bt4). Changing the engine and tuning within a narrower range did not significantly reduce the RMSE of the best model, but they both still performed better than the best boosted tree model fitted using the reduced recipe.</p>
@@ -3180,10 +3180,10 @@ Figure 2: Workflow rank of best performing boosted tree models (RMSE).
 <p>The final model I selected was the boosted tree model with narrowed tuning ranges using the basic recipe and the xgboost engine (bt4 in <a href="#fig-bt-workflow-rank" class="quarto-xref">Figure 2</a>).</p>
 <p><strong>Best Boosted Tree Hyperparameters</strong>:</p>
 <ul>
-<li><p>Number of sampled predictors: 10</p></li>
-<li><p>Number of trees: 2645</p></li>
-<li><p>Number of data points to split: 29</p></li>
-<li><p>Learn rate: 0.00315</p></li>
+<li>Number of sampled predictors: 10</li>
+<li>Number of trees: 2645</li>
+<li>Number of data points to split: 29</li>
+<li>Learn rate: 0.00315</li>
 </ul>
 </section>
 </section>
@@ -3202,17 +3202,17 @@ Figure 3: Predictions vs true birthweight values.
 </div>
 <p><strong>Significant deviations from actual birthweight</strong>:</p>
 <ul>
-<li><p>Actual birthweights range from less than 500 grams to over 5000 grams vs. predicted birthweights limited to just under 2000 grams and around 4000 grams</p></li>
-<li><p>Only about 54% of the predicted observations were within 10% of the actual birthweight</p></li>
-<li><p>Of 290 low birthweight births in the testing set (&lt; 2500 grams), the final model only predicted that 43 of the birthweights would be low birthweight</p></li>
+<li>Actual birthweights range from less than 500 grams to over 5000 grams vs. predicted birthweights limited to just under 2000 grams and around 4000 grams</li>
+<li>Only about 54% of the predicted observations were within 10% of the actual birthweight</li>
+<li>Of 290 low birthweight births in the testing set (&lt; 2500 grams), the final model only predicted that 43 of the birthweights would be low birthweight</li>
 </ul>
 </section>
 <section id="conclusions" class="level1">
 <h1>Conclusions</h1>
 <ul>
-<li><p>Boosted tree perfored the best but is not a strong model to predict birthweight</p></li>
-<li><p>Factors affecting birthweight are complex and cannot be reduced to a few seemingly more important variables</p></li>
-<li><p>Potential future project as a classification problem to predict low birthweight as a category</p></li>
+<li>Boosted tree perfored the best but is not a strong model to predict birthweight</li>
+<li>Factors affecting birthweight are complex and cannot be reduced to a few seemingly more important variables</li>
+<li>Potential future project as a classification problem to predict low birthweight as a category</li>
 </ul>
 
 </section>
