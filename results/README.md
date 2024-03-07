@@ -1,5 +1,5 @@
 # Overview
-This folder contains .rda files for fitted models and metrics
+This folder contains .rda files for fitted models, metrics, and autoplots
 
 # Files
 - `bt_tuned.rda`: tuned boosted tree (`scripts/6_fit_boosted_tree.R`)
